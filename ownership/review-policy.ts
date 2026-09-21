@@ -8,11 +8,17 @@
  *      or any file inside a __stories__/ folder)
  *      -> 1 approval from @factorialco/f0-general.
  *   3. Feature (conventional `feat:` title) -> 1 approval from
- *      @factorialco/f0-devs AND 1 from @factorialco/f0-designers.
+ *      @factorialco/f0-devs AND 1 from @factorialco/product-designers.
  *   4. Anything else -> 1 approval from @factorialco/f0-devs.
  *
- * The `needs-design-review` label adds @factorialco/f0-designers to the
- * requirements of any PR (opt-in by any reviewer or the author).
+ * Two opt-in labels add a design team to any PR, whatever its classification
+ * (anyone can apply them — reviewer or author):
+ *
+ *   `needs-design-review`    -> @factorialco/product-designers
+ *   `needs-f0-design-review` -> @factorialco/f0-designers
+ *
+ * They stack on top of the rules above and never duplicate a team the
+ * classification already requires.
  *
  * Creating a new sds module (a PR that adds a package.yml under sds/)
  * additionally requires 1 approval from @factorialco/f0-general, on top of
@@ -24,6 +30,12 @@
  * required check in branch protection — the workflow job itself only fails
  * on real errors. Run it with: GITHUB_TOKEN, GITHUB_REPOSITORY and
  * PR_NUMBER set (DRY_RUN=1 skips the comment, status and review requests).
+ *
+ * Requesting a review from a team needs a token with org scope: the default
+ * Actions token cannot resolve teams and answers 422 "Could not resolve to a
+ * node". Set REVIEW_REQUEST_TOKEN to a token that can (a GitHub App
+ * installation token or a PAT with `read:org`) — everything else keeps using
+ * GITHUB_TOKEN, so the comment and the status stay authored by the bot.
  */
 import fs from "node:fs"
 import path from "node:path"
@@ -35,10 +47,24 @@ const DOCS_PATTERN = /(\.mdx?|\.stories\.tsx?)$/
 const isDoc = (file: string) =>
   DOCS_PATTERN.test(file) || file.includes("/__stories__/")
 const FEAT_PATTERN = /^feat(\([^)]*\))?!?:/
-const DESIGN_LABEL = "needs-design-review"
+/** F0 design team — opt in with the `needs-f0-design-review` label */
+const F0_DESIGN_TEAM = "f0-designers"
+/** Product design team — required by features (rule 3) */
+const PRODUCT_DESIGN_TEAM = "product-designers"
+/** Opt-in labels, each adding its design team to any PR's requirements */
+const DESIGN_LABELS = [
+  { label: "needs-design-review", team: PRODUCT_DESIGN_TEAM },
+  { label: "needs-f0-design-review", team: F0_DESIGN_TEAM },
+] as const
 const COMMENT_MARKER = "<!-- comment-type: review-policy -->"
 
-const { GITHUB_TOKEN, GITHUB_REPOSITORY, PR_NUMBER, DRY_RUN } = process.env
+const {
+  GITHUB_TOKEN,
+  REVIEW_REQUEST_TOKEN,
+  GITHUB_REPOSITORY,
+  PR_NUMBER,
+  DRY_RUN,
+} = process.env
 if (!GITHUB_TOKEN || !GITHUB_REPOSITORY || !PR_NUMBER) {
   console.error(
     "Missing required env vars: GITHUB_TOKEN, GITHUB_REPOSITORY, PR_NUMBER"
@@ -46,11 +72,15 @@ if (!GITHUB_TOKEN || !GITHUB_REPOSITORY || !PR_NUMBER) {
   process.exit(2)
 }
 
-async function api<T>(pathname: string, init?: RequestInit): Promise<T> {
+async function api<T>(
+  pathname: string,
+  init?: RequestInit,
+  token = GITHUB_TOKEN
+): Promise<T> {
   const response = await fetch(`https://api.github.com${pathname}`, {
     ...init,
     headers: {
-      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github+json",
       "X-GitHub-Api-Version": "2022-11-28",
       ...init?.headers,
@@ -150,10 +180,13 @@ function classify(params: {
     name = "Feature"
     description =
       "The PR title starts with `feat`, so this is a feature: it needs one " +
-      "approval from f0-devs AND one from f0-designers (rule 3)."
+      `approval from f0-devs AND one from ${PRODUCT_DESIGN_TEAM} (rule 3).`
     requirements.push(
       { team: "f0-devs", reason: "Features need a dev approval" },
-      { team: "f0-designers", reason: "Features need a design approval" }
+      {
+        team: PRODUCT_DESIGN_TEAM,
+        reason: "Features need a product design approval",
+      }
     )
   } else {
     name = "Code change"
@@ -165,14 +198,16 @@ function classify(params: {
     })
   }
 
-  if (
-    params.labels.includes(DESIGN_LABEL) &&
-    !requirements.some((r) => r.team === "f0-designers")
-  ) {
-    requirements.push({
-      team: "f0-designers",
-      reason: `The \`${DESIGN_LABEL}\` label explicitly requests a design approval`,
-    })
+  for (const { label, team } of DESIGN_LABELS) {
+    if (
+      params.labels.includes(label) &&
+      !requirements.some((r) => r.team === team)
+    ) {
+      requirements.push({
+        team,
+        reason: `The \`${label}\` label explicitly requests an approval from ${team}`,
+      })
+    }
   }
 
   const newModules = params.addedFiles
@@ -281,9 +316,12 @@ lines.push(
   "",
   "- PRs touching only `sds/` modules require their owners and nothing else.",
   "- Otherwise, docs-only changes (`*.md`, `*.mdx`, `*.stories.tsx`, anything in `__stories__/`) → one f0-general approval.",
-  "- Otherwise, `feat:` titles → one f0-devs **and** one f0-designers approval. Not a feature? Fix the title prefix.",
+  `- Otherwise, \`feat:\` titles → one f0-devs **and** one ${PRODUCT_DESIGN_TEAM} approval. Not a feature? Fix the title prefix.`,
   "- Anything else → one f0-devs approval.",
-  `- Add the \`${DESIGN_LABEL}\` label to also request a design approval on any PR.`,
+  ...DESIGN_LABELS.map(
+    ({ label, team }) =>
+      `- Add the \`${label}\` label to also request an approval from ${team} on any PR.`
+  ),
   "- Creating a new `sds/` module (new `package.yml`) additionally requires an f0-general approval.",
   "",
   `Policy source: [\`ownership/review-policy.ts\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/ownership/review-policy.ts) · Team members: [\`ownership/teams.yml\`](https://github.com/${GITHUB_REPOSITORY}/blob/main/ownership/teams.yml)`,
@@ -317,21 +355,26 @@ if (DRY_RUN) {
 
   // Best-effort: put the PR in the queue of the teams that still need to
   // approve. The status check is the enforcement; failing to request a team
-  // review (e.g. token scope) must not fail the job on its own.
+  // review (e.g. token scope) must not fail the job on its own. One request
+  // per team, so a team GitHub cannot resolve does not drop the others.
   const alreadyRequested = pr.requested_teams.map((team) => team.slug)
   const toRequest = pending
     .map((r) => r.team)
     .filter((slug) => !alreadyRequested.includes(slug))
-  if (toRequest.length > 0) {
+  for (const slug of toRequest) {
     try {
-      await api(`${prPath}/requested_reviewers`, {
-        method: "POST",
-        body: JSON.stringify({ team_reviewers: toRequest }),
-      })
-      console.log(`Requested review from: ${toRequest.join(", ")}`)
+      await api(
+        `${prPath}/requested_reviewers`,
+        { method: "POST", body: JSON.stringify({ team_reviewers: [slug] }) },
+        REVIEW_REQUEST_TOKEN || GITHUB_TOKEN
+      )
+      console.log(`Requested review from ${slug}`)
     } catch (error) {
       console.warn(
-        `Could not request team reviews (${(error as Error).message})`
+        `Could not request a review from ${slug} (${(error as Error).message})` +
+          (REVIEW_REQUEST_TOKEN
+            ? ""
+            : " — REVIEW_REQUEST_TOKEN is not set, and the default Actions token cannot resolve org teams")
       )
     }
   }

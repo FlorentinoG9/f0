@@ -26,17 +26,33 @@ enforce the policy. Rules, in order of precedence:
    `*.stories.tsx` or any file inside a `__stories__/` folder): one approval
    from `@factorialco/f0-general`.
 3. **Feature** — the PR title starts with `feat`: one approval from
-   `@factorialco/f0-devs` **and** one from `@factorialco/f0-designers`.
+   `@factorialco/f0-devs` **and** one from `@factorialco/product-designers`.
 4. **Anything else** — one approval from `@factorialco/f0-devs`.
 
-Adding the `needs-design-review` label to any PR also requires an
-`@factorialco/f0-designers` approval (opt-in by anyone).
+Two opt-in labels add a design team to any PR, whatever its classification.
+Anyone can apply them:
+
+| Label                    | Requires an approval from        |
+| ------------------------ | -------------------------------- |
+| `needs-design-review`    | `@factorialco/product-designers` |
+| `needs-f0-design-review` | `@factorialco/f0-designers`      |
+
+They stack on top of the rules above and never duplicate a team the
+classification already requires, so `needs-design-review` on a `feat:` PR adds
+nothing — rule 3 already asks for `product-designers`.
+
+For the same reason the workflow passes `REVIEW_REQUEST_TOKEN` — a token with
+org scope, currently the `RELEASE_PLEASE_GH_TOKEN` secret — used only to add
+the pending teams as reviewers. Without it every request fails with `422 Could
+not resolve to a node`, and teams that are not code owners (the design teams,
+pulled in by rule 3 or by either label) never land in anyone's review queue.
+The comment and the commit status keep using the default token.
 
 Creating a **new sds module** (a PR that adds a `package.yml` under `sds/`)
 additionally requires an `@factorialco/f0-general` approval, on top of
 whatever the classification requires.
 
-Membership of the three policy teams is mirrored in [`teams.yml`](teams.yml)
+Membership of the policy teams is mirrored in [`teams.yml`](teams.yml)
 (`policy_teams`) because the default Actions token cannot read org team
 membership. Keep it in sync with the GitHub org teams.
 
