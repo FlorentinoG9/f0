@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.11.0](https://github.com/factorialco/f0/compare/f0-react-v7.10.0...f0-react-v7.11.0) (2026-09-21)
+
+
+### Features
+
+* **SurveyFormBuilder:** configurable question menu labels ([#5581](https://github.com/factorialco/f0/issues/5581)) ([7f8127c](https://github.com/factorialco/f0/commit/7f8127c2e8d5835f1b972b9d54abeb9d5c3f9f27))
+
 ## [7.10.0](https://github.com/factorialco/f0/compare/f0-react-v7.9.0...f0-react-v7.10.0) (2026-09-21)
 
 
