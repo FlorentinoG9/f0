@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.15.1](https://github.com/factorialco/f0/compare/f0-react-v7.15.0...f0-react-v7.15.1) (2026-09-21)
+
+
+### Bug Fixes
+
+* **F0Coachmark:** anchor to a target that is actually drawn ([#5616](https://github.com/factorialco/f0/issues/5616)) ([a7feb34](https://github.com/factorialco/f0/commit/a7feb34432686f6d7d70abd587a8b91a8d9fec48))
+
 ## [7.15.0](https://github.com/factorialco/f0/compare/f0-react-v7.14.0...f0-react-v7.15.0) (2026-09-21)
 
 
