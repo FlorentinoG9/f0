@@ -16,42 +16,23 @@
     "hooks:e2e": "tsx scripts/check-git-hooks.ts"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.7.1",
-    "@commitlint/config-conventional": "^19.7.1",
-    "consola": "^3.4.0",
-    "eslint": "^9.39.2",
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
+    "consola": "^3.4.2",
+    "eslint": "^10.10.0",
     "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.26",
-    "eslint-plugin-storybook": "^10.3.3",
-    "lefthook": "^1.11.3",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.6",
+    "eslint-plugin-storybook": "^10.6.0",
+    "lefthook": "^2.1.12",
     "lint-staged": "^16.4.0",
     "npm-run-all": "^4.1.5",
-    "oxfmt": "^0.26.0",
-    "oxlint": "^1.41.0",
-    "prettier": "^3.5.2",
-    "prettier-plugin-organize-imports": "^4.1.0",
-    "prettier-plugin-tailwindcss": "^0.6.10",
-    "tsx": "^4.8.1"
+    "oxfmt": "^0.67.0",
+    "oxlint": "^1.82.0",
+    "prettier": "^3.9.6",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "tsx": "^4.23.13"
   },
-  "packageManager": "pnpm@10.34.5+sha512.a4ee05f2f73658255bd6a89859c065a45c28a57daefae2c893a168ee2b73168c37b91e83e57ea67654ad03f03031746430e8bce38e362e042605fb8abc80192e",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@swc/core",
-      "esbuild",
-      "lefthook",
-      "msw",
-      "unrs-resolver"
-    ],
-    "overrides": {
-      "esm-env": "npm:esm-env-runtime@^0.1.1",
-      "@types/react": "18.3.18",
-      "@types/react-dom": "^18.3.1",
-      "react": "18.3.1",
-      "react-dom": "18.3.1",
-      "@factorialco/f0-react-native>react": "19.2.3",
-      "@factorialco/f0-react-native>react-dom": "19.2.3",
-      "@factorialco/f0-react-native>react-test-renderer": "19.2.3"
-    }
-  }
+  "packageManager": "pnpm@10.34.5+sha512.a4ee05f2f73658255bd6a89859c065a45c28a57daefae2c893a168ee2b73168c37b91e83e57ea67654ad03f03031746430e8bce38e362e042605fb8abc80192e"
 }

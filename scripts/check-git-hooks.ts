@@ -1,5 +1,4 @@
 #!/usr/bin/env tsx
-import consola from "consola"
 /**
  * check-git-hooks.ts — end-to-end check of the git hook wiring.
  *
@@ -38,6 +37,8 @@ import {
 import { tmpdir } from "node:os"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
+
+import consola from "consola"
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..")
 
@@ -206,7 +207,10 @@ function main(): void {
       "pinned origin/main to the base commit"
     )
     run("git", ["config", "commit.gpgsign", "false"], clone)
-    run("git", ["config", "core.hooksPath", ".git/hooks"], clone)
+    // lefthook 2 refuses to install whenever core.hooksPath is set at all, even
+    // to the default value. The intent here is "no custom hooks path", so clear
+    // any inherited override instead of pinning the default.
+    run("git", ["config", "--local", "--unset-all", "core.hooksPath"], clone)
     assert(
       !existsSync(join(clone, ".git", "hooks", "pre-commit")),
       "fresh clone has no hooks yet"

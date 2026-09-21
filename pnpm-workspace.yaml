@@ -2,3 +2,23 @@ packages:
   - "packages/*"
   - "packages/examples/*"
   - "ownership"
+
+# Moved out of the root package.json `pnpm` field: pnpm 10.34 no longer reads
+# it and silently ignored both of these, so the installed tree only matched by
+# way of the lockfile. See https://pnpm.io/settings
+onlyBuiltDependencies:
+  - "@swc/core"
+  - esbuild
+  - lefthook
+  - msw
+  - unrs-resolver
+
+overrides:
+  esm-env: "npm:esm-env-runtime@^0.1.1"
+  react: 18.3.1
+  react-dom: 18.3.1
+  "@types/react": 18.3.18
+  "@types/react-dom": "^18.3.1"
+  "@factorialco/f0-react-native>react": 19.2.3
+  "@factorialco/f0-react-native>react-dom": 19.2.3
+  "@factorialco/f0-react-native>react-test-renderer": 19.2.3
