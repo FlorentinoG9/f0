@@ -8,7 +8,7 @@ import { useSelectContext } from "../SelectContext.tsx"
 import * as SelectPrimitive from "./radix-ui"
 
 const SelectItem = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.Item>,
+  React.ComponentRef<typeof SelectPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> & {
     selected?: boolean
     multiple?: boolean

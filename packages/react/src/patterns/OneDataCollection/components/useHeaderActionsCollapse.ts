@@ -1,5 +1,6 @@
 import { type RefObject, useCallback, useRef, useState } from "react"
 import { useResizeObserver } from "usehooks-ts"
+import { asNonNullRef } from "@/lib/refs"
 
 const GAP = 16
 
@@ -56,11 +57,11 @@ export function useHeaderActionsCollapse(
   }, [toolbarRef, actionsRef, reservedRef])
 
   useResizeObserver({
-    ref: toolbarRef as RefObject<HTMLDivElement>,
+    ref: asNonNullRef(toolbarRef),
     onResize: measure,
   })
   useResizeObserver({
-    ref: actionsRef as RefObject<HTMLDivElement>,
+    ref: asNonNullRef(actionsRef),
     onResize: measure,
   })
 

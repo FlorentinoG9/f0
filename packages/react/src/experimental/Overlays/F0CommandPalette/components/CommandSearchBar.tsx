@@ -43,7 +43,7 @@ type CommandSearchBarProps = {
   /** Drop the chip at `index`, and every link after it. */
   onRemoveScope: (index: number) => void
   onAsk: () => void
-  fieldRef: RefObject<HTMLDivElement>
+  fieldRef: RefObject<HTMLDivElement | null>
   listboxId: string
   activeOptionId?: string
   /** Whether there are options — `aria-expanded` reports this, not the panel. */

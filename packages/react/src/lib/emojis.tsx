@@ -145,7 +145,7 @@ export const useEmojiConfetti = () => {
   const shouldReduceMotion = useReducedMotion()
 
   const fireEmojiConfetti = useCallback(
-    (emoji: string, elementRef: RefObject<HTMLElement>) => {
+    (emoji: string, elementRef: RefObject<HTMLElement | null>) => {
       const button = elementRef.current
       if (button) {
         const rect = button.getBoundingClientRect()

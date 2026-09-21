@@ -19,7 +19,7 @@ import {
 
 interface NestedCellProps {
   width?: number | "auto"
-  linkRef: React.RefObject<HTMLAnchorElement>
+  linkRef: React.RefObject<HTMLAnchorElement | null>
   firstCell: boolean
   nestedRowProps?: NestedRowProps & {
     rowWithChildren?: boolean

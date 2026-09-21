@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react"
 
 export function useConfetti(shouldReduceMotion: boolean) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const intervalRef = useRef<NodeJS.Timeout>()
+  const intervalRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
   const handleMouseEnter = useCallback(() => {
     const canvas = canvasRef.current

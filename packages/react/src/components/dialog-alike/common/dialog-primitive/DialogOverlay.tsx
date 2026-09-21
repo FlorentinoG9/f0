@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import { useDialogPrimitiveContext } from "./context"
 
 export const DialogOverlay = forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Overlay>,
+  React.ComponentRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => {
   const context = useDialogPrimitiveContext()

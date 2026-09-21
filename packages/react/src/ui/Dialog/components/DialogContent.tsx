@@ -7,7 +7,7 @@ import { DialogOverlay } from "./DialogOverlay"
 import { DialogPortal } from "./DialogPortal"
 
 export const DialogContent = forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     wrapperClassName?: string
     withTranslateAnimation?: boolean

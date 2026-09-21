@@ -26,7 +26,7 @@ const animationClassName = (animation: DialogAnimation) => {
 }
 
 export const DialogContent = forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
     wrapperClassName?: string
     container?: HTMLElement | null

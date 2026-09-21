@@ -6,6 +6,7 @@ import { F0RichTextDisplay } from "@/components/RichText/F0RichTextDisplay"
 import { ChevronDown } from "@/icons/app"
 import { useReducedMotion } from "@/lib/a11y"
 import { useI18n } from "@/lib/providers/i18n"
+import { asNonNullRef } from "@/lib/refs"
 import { cn, focusRing } from "@/lib/utils"
 
 // The description is a single run of prose, so the paragraphs markdown wraps it
@@ -27,8 +28,10 @@ export const Description = ({ description }: { description: string }) => {
    */
   const descriptionRef = useRef<HTMLDivElement>(null)
   const measureRef = useRef<HTMLDivElement>(null)
-  const descriptionSize = useResizeObserver({ ref: descriptionRef })
-  const measureSize = useResizeObserver({ ref: measureRef })
+  const descriptionSize = useResizeObserver({
+    ref: asNonNullRef(descriptionRef),
+  })
+  const measureSize = useResizeObserver({ ref: asNonNullRef(measureRef) })
 
   useEffect(() => {
     if (measureSize.height && descriptionSize.height) {

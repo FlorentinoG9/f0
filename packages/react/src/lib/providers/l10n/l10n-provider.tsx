@@ -1,5 +1,6 @@
 "use client"
 
+import type { JSX } from "react"
 import { createContext, ReactNode, useContext } from "react"
 import { defaults } from "./l10n-provider-defaults"
 import { L10nContextValue } from "./types"

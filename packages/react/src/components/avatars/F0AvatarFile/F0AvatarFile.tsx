@@ -1,4 +1,4 @@
-import { ElementRef, forwardRef, useMemo } from "react"
+import { ComponentRef, forwardRef, useMemo } from "react"
 import { Tooltip } from "@/experimental/Overlays/Tooltip"
 import { DataTestIdWrapper, WithDataTestIdProps } from "@/lib/data-testid"
 import { cn } from "@/lib/utils"
@@ -20,7 +20,7 @@ export type F0AvatarFileProps = Omit<
 } & Pick<BaseAvatarProps, "aria-label" | "aria-labelledby"> &
   WithDataTestIdProps
 
-const F0AvatarFile = forwardRef<ElementRef<typeof Avatar>, F0AvatarFileProps>(
+const F0AvatarFile = forwardRef<ComponentRef<typeof Avatar>, F0AvatarFileProps>(
   ({ file, badge, dataTestId, ...props }, ref) => {
     const { type: fileType, color: fileColor } = getFileTypeInfo(file)
 

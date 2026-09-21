@@ -395,7 +395,7 @@ export const TwoLanesDnD: Story = {
     }) {
       const ref = useRef<HTMLDivElement | null>(null)
       useDroppableList({
-        ref: ref as React.RefObject<HTMLElement>,
+        ref: ref as React.RefObject<HTMLElement | null>,
         id,
         accepts: ["list-card"],
       })

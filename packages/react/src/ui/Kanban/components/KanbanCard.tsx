@@ -49,7 +49,7 @@ export function KanbanCard<T = unknown>({
   const [overEdge, setOverEdge] = useState<"top" | "bottom" | null>(null)
 
   useDraggable<T>({
-    ref: ref as React.RefObject<HTMLElement>,
+    ref: ref as React.RefObject<HTMLElement | null>,
     payload: { kind: drag.type ?? "list-card", id: drag.id, data: drag.data },
   })
 

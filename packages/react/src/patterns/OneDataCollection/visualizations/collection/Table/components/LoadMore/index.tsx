@@ -31,7 +31,7 @@ type LoadMoreRowProps<
   Grouping
 > & {
   onLoadMoreChildren: () => void
-  rowRef: React.RefObject<HTMLTableRowElement>
+  rowRef: React.RefObject<HTMLTableRowElement | null>
 }
 
 const LoadMoreRowInner = <
@@ -54,7 +54,7 @@ const LoadMoreRowInner = <
   >,
   ref:
     | ((element: HTMLTableRowElement | null) => void)
-    | React.RefObject<HTMLTableRowElement>
+    | React.RefObject<HTMLTableRowElement | null>
     | null
 ) => {
   return (
@@ -88,7 +88,7 @@ export const LoadMoreRow = forwardRef(LoadMoreRowInner) as <
   > & {
     ref?:
       | ((element: HTMLTableRowElement | null) => void)
-      | React.RefObject<HTMLTableRowElement>
+      | React.RefObject<HTMLTableRowElement | null>
       | null
   }
 ) => ReturnType<typeof LoadMoreRowInner>

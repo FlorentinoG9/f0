@@ -51,7 +51,7 @@ export type F0AiChatTextAreaSubmitPayload = {
 }
 
 export type F0AiChatTextAreaProps = {
-  ref: RefObject<HTMLDivElement>
+  ref: RefObject<HTMLDivElement | null>
   /** Emitted when the user submits. Awaited so the textarea can stay disabled. */
   onSubmit: (payload: F0AiChatTextAreaSubmitPayload) => void | Promise<void>
   /** Called when the user clicks the stop button while a response is streaming. */

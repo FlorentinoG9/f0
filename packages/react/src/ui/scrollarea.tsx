@@ -6,7 +6,7 @@ import {
   useEffect,
   useRef,
   type ComponentPropsWithoutRef,
-  type ElementRef,
+  type ComponentRef,
 } from "react"
 import { cn } from "../lib/utils"
 
@@ -14,7 +14,7 @@ type ScrollAreaProps = ComponentPropsWithoutRef<
   typeof ScrollAreaPrimitive.Root
 > & {
   showBar?: boolean
-  viewportRef?: React.RefObject<HTMLDivElement>
+  viewportRef?: React.RefObject<HTMLDivElement | null>
   onScrollTop?: () => void
   onScrollBottom?: () => void
   /**
@@ -25,7 +25,7 @@ type ScrollAreaProps = ComponentPropsWithoutRef<
 }
 
 const ScrollAreaImpl = forwardRef<
-  ElementRef<typeof ScrollAreaPrimitive.Root>,
+  ComponentRef<typeof ScrollAreaPrimitive.Root>,
   ScrollAreaProps & { focusableViewport: boolean }
 >(
   (
@@ -96,14 +96,14 @@ const ScrollAreaImpl = forwardRef<
 ScrollAreaImpl.displayName = "ScrollAreaImpl"
 
 const ScrollArea = forwardRef<
-  ElementRef<typeof ScrollAreaPrimitive.Root>,
+  ComponentRef<typeof ScrollAreaPrimitive.Root>,
   ScrollAreaProps
 >((props, ref) => <ScrollAreaImpl ref={ref} {...props} focusableViewport />)
 ScrollArea.displayName = ScrollAreaPrimitive.Root.displayName
 
 /** Internal static-enum variant: listbox options own focus, not the viewport. */
 const NonFocusableScrollArea = forwardRef<
-  ElementRef<typeof ScrollAreaPrimitive.Root>,
+  ComponentRef<typeof ScrollAreaPrimitive.Root>,
   ScrollAreaProps
 >((props, ref) => (
   <ScrollAreaImpl ref={ref} {...props} focusableViewport={false} />
@@ -111,7 +111,7 @@ const NonFocusableScrollArea = forwardRef<
 NonFocusableScrollArea.displayName = ScrollAreaPrimitive.Root.displayName
 
 const ScrollBar = forwardRef<
-  ElementRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
+  ComponentRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>,
   ComponentPropsWithoutRef<typeof ScrollAreaPrimitive.ScrollAreaScrollbar> & {
     showBar?: boolean
   }

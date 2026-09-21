@@ -1,5 +1,6 @@
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
 import { useResizeObserver } from "usehooks-ts"
+import { asNonNullRef } from "@/lib/refs"
 import { cn } from "../../lib/utils"
 
 /**
@@ -26,7 +27,7 @@ function useOverflowCalculation<T>(items: T[], gap: number) {
 
   // Watch for container size changes
   useResizeObserver({
-    ref: containerRef,
+    ref: asNonNullRef(containerRef),
     onResize: () => {
       calculateVisibleItems()
     },

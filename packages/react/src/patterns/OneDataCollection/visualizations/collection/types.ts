@@ -1,3 +1,4 @@
+import type { JSX } from "react"
 import { IconType } from "@/components/F0Icon"
 import { OnSelectItemsCallback, RecordType } from "@/hooks/datasource"
 import { SortingsDefinition } from "@/hooks/datasource/types/sortings.typings"
