@@ -8,7 +8,7 @@ import { cn, focusRing } from "../lib/utils"
 import { Text } from "./Text"
 
 const Checkbox = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
+  React.ComponentRef<typeof CheckboxPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & {
     indeterminate?: boolean
     hideLabel?: boolean

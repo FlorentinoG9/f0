@@ -59,7 +59,7 @@ export function KanbanLane<TRecord extends RecordType>({
   useDroppableList(
     hasFullDnD
       ? {
-          ref: laneRef as React.RefObject<HTMLElement>,
+          ref: laneRef as React.RefObject<HTMLElement | null>,
           id: id as string,
           accepts: ["list-card"],
         }

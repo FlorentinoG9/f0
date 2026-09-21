@@ -1,14 +1,14 @@
-import type { StoryFn } from "@storybook/react-vite"
+import type { Decorator } from "@storybook/react-vite"
 import { F0DataChart } from "../F0DataChart"
 import type { F0DataChartProps } from "../types"
 
-export const ChartDecorator = (Story: StoryFn) => (
+export const ChartDecorator: Decorator = (Story) => (
   <div className="h-[360px] w-[600px]">
     <Story />
   </div>
 )
 
-export const ChartDecoratorWide = (Story: StoryFn) => (
+export const ChartDecoratorWide: Decorator = (Story) => (
   <div className="h-[360px] w-[900px]">
     <Story />
   </div>
@@ -23,19 +23,19 @@ export const ChartDecoratorWide = (Story: StoryFn) => (
  * - Medium (220–519px) — wide chat card
  * - Large  (≥ 520px) — dashboard cell
  */
-export const ChartDecoratorSmall = (Story: StoryFn) => (
+export const ChartDecoratorSmall: Decorator = (Story) => (
   <div className="h-[220px] w-[180px]">
     <Story />
   </div>
 )
 
-export const ChartDecoratorMedium = (Story: StoryFn) => (
+export const ChartDecoratorMedium: Decorator = (Story) => (
   <div className="h-[260px] w-[320px]">
     <Story />
   </div>
 )
 
-export const ChartDecoratorLarge = (Story: StoryFn) => (
+export const ChartDecoratorLarge: Decorator = (Story) => (
   <div className="h-[320px] w-[720px]">
     <Story />
   </div>

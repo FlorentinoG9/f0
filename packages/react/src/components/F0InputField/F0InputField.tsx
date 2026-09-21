@@ -553,49 +553,54 @@ const F0InputField = forwardRef<HTMLDivElement, InputFieldProps<string>>(
               onClick={handleClickChildren}
               className="w-full min-w-0 flex-1"
             >
-              {cloneElement(children as React.ReactElement, {
-                onChange: handleChange,
-                onBlur: props.onBlur,
-                onFocus: props.onFocus,
-                onAnimationStart: handleAnimationStart,
-                disabled: noEdit,
-                readOnly: readonly,
-                role,
-                ref: inputRef,
-                "aria-controls": ariaControls,
-                // `aria-expanded` is not allowed on a textbox, only on a
-                // combobox. Radix triggers spread it onto whatever they wrap,
-                // so a plain field that happens to open a popover would render
-                // a critical axe violation the moment this stopped being
-                // dropped.
-                "aria-expanded": role === "combobox" ? ariaExpanded : undefined,
-                "aria-activedescendant": ariaActiveDescendant,
-                "aria-autocomplete": ariaAutocomplete,
-                // Only when given: `cloneElement` would otherwise overwrite a
-                // description the child brought itself.
-                ...(ariaDescribedBy !== undefined && {
-                  "aria-describedby": ariaDescribedBy,
-                }),
-                id,
-                value: localValue ?? "",
-                "aria-label": label || placeholder || "no-label",
-                "aria-busy": loading,
-                "aria-disabled": noEdit,
-                name,
-                className: cn(
-                  "h-full w-full min-w-0 px-3 text-f1-foreground",
-                  "[&::-webkit-search-cancel-button]:hidden",
-                  (icon || avatar) && "pl-8",
-                  (icon || avatar) && size === "md" && "pl-9",
-                  // After the icon offsets: the value in front of the input
-                  // already carries them, so applying them again leaves the
-                  // caret a whole inset away from the text.
-                  showValueSlot && "pl-0",
-                  disabled && "cursor-not-allowed",
-                  (children as React.ReactElement).props.className,
-                  inputElementVariants({ size })
-                ),
-              })}
+              {cloneElement(
+                children as React.ReactElement<Record<string, unknown>>,
+                {
+                  onChange: handleChange,
+                  onBlur: props.onBlur,
+                  onFocus: props.onFocus,
+                  onAnimationStart: handleAnimationStart,
+                  disabled: noEdit,
+                  readOnly: readonly,
+                  role,
+                  ref: inputRef,
+                  "aria-controls": ariaControls,
+                  // `aria-expanded` is not allowed on a textbox, only on a
+                  // combobox. Radix triggers spread it onto whatever they wrap,
+                  // so a plain field that happens to open a popover would render
+                  // a critical axe violation the moment this stopped being
+                  // dropped.
+                  "aria-expanded":
+                    role === "combobox" ? ariaExpanded : undefined,
+                  "aria-activedescendant": ariaActiveDescendant,
+                  "aria-autocomplete": ariaAutocomplete,
+                  // Only when given: `cloneElement` would otherwise overwrite a
+                  // description the child brought itself.
+                  ...(ariaDescribedBy !== undefined && {
+                    "aria-describedby": ariaDescribedBy,
+                  }),
+                  id,
+                  value: localValue ?? "",
+                  "aria-label": label || placeholder || "no-label",
+                  "aria-busy": loading,
+                  "aria-disabled": noEdit,
+                  name,
+                  className: cn(
+                    "h-full w-full min-w-0 px-3 text-f1-foreground",
+                    "[&::-webkit-search-cancel-button]:hidden",
+                    (icon || avatar) && "pl-8",
+                    (icon || avatar) && size === "md" && "pl-9",
+                    // After the icon offsets: the value in front of the input
+                    // already carries them, so applying them again leaves the
+                    // caret a whole inset away from the text.
+                    showValueSlot && "pl-0",
+                    disabled && "cursor-not-allowed",
+                    (children as React.ReactElement<{ className?: string }>)
+                      .props.className,
+                    inputElementVariants({ size })
+                  ),
+                }
+              )}
             </div>
             <div
               data-slot="placeholder"

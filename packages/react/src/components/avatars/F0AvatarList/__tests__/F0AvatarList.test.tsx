@@ -85,7 +85,8 @@ describe("F0AvatarList", () => {
     // markup can never match twice. Normalising it is the whole allowance —
     // everything else is compared byte for byte.
     const stripReactIds = (html: string) =>
-      html.replace(/radix-:r[^:]*:/g, "radix-:id:")
+      // React 18 generates `:r1:`, React 19 `_r_1_`; normalise both.
+      html.replace(/radix-(?::r[^:]*:|_r_[^_]*_)/g, "radix-:id:")
 
     const fill = render(
       <F0AvatarList

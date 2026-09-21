@@ -13,7 +13,7 @@ interface FileListProps {
   files: File[]
   disabled: boolean
   setFiles: React.Dispatch<React.SetStateAction<File[]>>
-  fileInputRef: React.RefObject<HTMLInputElement>
+  fileInputRef: React.RefObject<HTMLInputElement | null>
 }
 
 const FileList = ({

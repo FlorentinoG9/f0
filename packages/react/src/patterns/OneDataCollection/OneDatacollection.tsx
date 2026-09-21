@@ -1,6 +1,7 @@
 import { useDeepCompareEffect } from "@reactuses/core"
 import isEqual from "lodash/isEqual"
 import { motion } from "motion/react"
+import type { JSX } from "react"
 import {
   useCallback,
   useEffect,

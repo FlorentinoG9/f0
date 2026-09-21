@@ -22,7 +22,7 @@ interface FooterProps {
   maxCharacters: number | undefined
   secondaryAction: secondaryActionsType | undefined
   primaryAction: primaryActionType | undefined
-  fileInputRef: React.RefObject<HTMLInputElement>
+  fileInputRef: React.RefObject<HTMLInputElement | null>
   canUseFiles: boolean
   enhance: UseEnhanceReturn
   disableButtons: boolean

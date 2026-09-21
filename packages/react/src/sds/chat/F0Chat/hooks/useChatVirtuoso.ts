@@ -67,7 +67,7 @@ type UseChatVirtuosoOptions = {
 }
 
 type UseChatVirtuosoReturn = {
-  virtuosoRef: RefObject<VirtuosoHandle>
+  virtuosoRef: RefObject<VirtuosoHandle | null>
   /** Remount key for the Virtuoso element (conversation × window epoch). */
   listKey: string
   firstItemIndex: number

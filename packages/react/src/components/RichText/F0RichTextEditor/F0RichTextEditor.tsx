@@ -150,7 +150,7 @@ const FullscreenEditingToolbar = ({
   enhanceConfig: F0RichTextEditorProps["enhanceConfig"]
   plainHtmlMode: boolean
   /** The enhance menu is measured against, and portalled into, this box. */
-  toolbarRef: RefObject<HTMLDivElement>
+  toolbarRef: RefObject<HTMLDivElement | null>
   toolbarWidth: number
   onClose: () => void
 }) => {

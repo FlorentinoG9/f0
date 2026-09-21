@@ -62,7 +62,7 @@ const readCueText = (track: TextTrack): string => {
  * @returns the joined cue text, or `undefined` while none is available
  */
 export const useDerivedTranscription = (
-  audioRef: RefObject<HTMLAudioElement>,
+  audioRef: RefObject<HTMLAudioElement | null>,
   currentSrc: string | undefined,
   enabled: boolean
 ): string | undefined => {

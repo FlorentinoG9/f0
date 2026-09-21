@@ -81,7 +81,7 @@ function measureText(span: HTMLSpanElement, text: string): number {
  */
 export function useLabelsOverflow(labels: string[]): {
   allFit: boolean
-  containerRef: React.RefObject<HTMLDivElement>
+  containerRef: React.RefObject<HTMLDivElement | null>
 } {
   const containerRef = useRef<HTMLDivElement>(null!)
   const [allFit, setAllFit] = useState(true)

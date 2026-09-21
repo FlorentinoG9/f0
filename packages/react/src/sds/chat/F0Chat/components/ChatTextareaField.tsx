@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils"
 import { type HighlightSegment } from "../hooks/highlight-utils"
 
 type ChatTextareaFieldProps = {
-  textareaRef: RefObject<HTMLTextAreaElement>
-  highlightRef: RefObject<HTMLDivElement>
+  textareaRef: RefObject<HTMLTextAreaElement | null>
+  highlightRef: RefObject<HTMLDivElement | null>
   value: string
   placeholder: string
   accessibleLabel: string

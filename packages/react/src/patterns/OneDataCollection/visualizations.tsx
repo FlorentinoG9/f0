@@ -1,3 +1,4 @@
+import type { JSX } from "react"
 import { useState } from "react"
 import { F0Button } from "@/components/F0Button"
 import { F0Icon, IconType } from "@/components/F0Icon"

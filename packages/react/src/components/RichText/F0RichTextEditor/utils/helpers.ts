@@ -3,7 +3,7 @@ import { RefObject } from "react"
 import { heightType, resultType } from "./types"
 
 const checkContainerHeight = (
-  containerRef: RefObject<HTMLDivElement>,
+  containerRef: RefObject<HTMLDivElement | null>,
   heightThreshold = 240
 ): boolean => {
   if (!containerRef.current) {
@@ -13,7 +13,7 @@ const checkContainerHeight = (
 }
 
 const isScrolledToBottom = (
-  containerRef: RefObject<HTMLDivElement>
+  containerRef: RefObject<HTMLDivElement | null>
 ): boolean => {
   if (!containerRef.current) {
     return true
@@ -45,7 +45,7 @@ const getHeightThreshold = (height: heightType): number =>
 const getHeight = (height: heightType) => HEIGHTS[height]?.className
 
 interface SetupContainerObserversProps {
-  containerRef: RefObject<HTMLDivElement>
+  containerRef: RefObject<HTMLDivElement | null>
   onHeightChange: (hasFullHeight: boolean) => void
   onScrollChange: (isAtBottom: boolean) => void
   heightThreshold: number

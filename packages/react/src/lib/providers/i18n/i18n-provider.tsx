@@ -1,5 +1,6 @@
 "use client"
 
+import type { JSX } from "react"
 import { createContext, ReactNode, useContext, useMemo } from "react"
 import {
   defaultTranslations,

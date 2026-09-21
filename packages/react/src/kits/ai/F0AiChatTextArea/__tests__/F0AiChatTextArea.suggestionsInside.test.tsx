@@ -37,7 +37,7 @@ vi.mock("../components/TextareaField", () => ({
     inputValue,
     onInputChange,
   }: {
-    textareaRef: RefObject<HTMLTextAreaElement>
+    textareaRef: RefObject<HTMLTextAreaElement | null>
     inputValue: string
     onInputChange: (value: string, cursorPos: number) => void
   }) => (

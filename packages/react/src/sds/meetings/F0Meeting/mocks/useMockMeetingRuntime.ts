@@ -185,7 +185,9 @@ export const useMockMeetingRuntime = (
   const displayStreamRef = useRef<MediaStream | null>(null)
   const shareGenerationRef = useRef(0)
   const bindingsRef = useRef(new Map<string, F0MeetingBinding>())
-  const screenShareRef = useRef<ReturnType<typeof createScreenShareBinding>>()
+  const screenShareRef = useRef<
+    ReturnType<typeof createScreenShareBinding> | undefined
+  >(undefined)
 
   // A different room is a different call: without this, hanging up once would
   // leave every later huddle stuck on the "ended" screen.

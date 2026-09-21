@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useResizeObserver } from "usehooks-ts"
+import { asNonNullRef } from "@/lib/refs"
 
 // Hysteresis margin (px): once items overflow, require this much extra space
 // before re-showing them. Prevents scrollbar-induced layout oscillation.
@@ -46,7 +47,7 @@ export function useOverflowCalculation<T>(
 
   // Watch for container size changes
   useResizeObserver({
-    ref: containerRef,
+    ref: asNonNullRef(containerRef),
     onResize: () => {
       calculateVisibleItems()
     },

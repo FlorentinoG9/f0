@@ -24,7 +24,7 @@ interface ActionBarProps {
   isAtMaxFiles: boolean
   maxFiles: number | undefined
   acceptValue: string | undefined
-  fileInputRef: RefObject<HTMLInputElement>
+  fileInputRef: RefObject<HTMLInputElement | null>
   handleFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
   inProgress?: boolean
   hasDataToSend: boolean

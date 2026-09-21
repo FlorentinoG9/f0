@@ -65,7 +65,7 @@ const fieldIn = (target: HTMLElement): HTMLElement | null => {
 }
 
 const useCentredWhenItCannotFit = (
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null>,
   step: number | undefined,
   target: HTMLElement
 ) => {
@@ -125,7 +125,7 @@ const useViewportCentre = () =>
     []
   )
 
-const useWiggle = (ref: RefObject<HTMLElement>) => {
+const useWiggle = (ref: RefObject<HTMLElement | null>) => {
   const reducedMotion = useReducedMotion()
 
   return useCallback(() => {

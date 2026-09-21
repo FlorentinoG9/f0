@@ -1,4 +1,5 @@
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter"
+import type { JSX } from "react"
 import { useEffect, useRef, useState } from "react"
 import { ScrollArea } from "@/experimental/Utilities/ScrollArea"
 import type { RecordType } from "@/hooks/datasource"

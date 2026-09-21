@@ -1,4 +1,5 @@
-import { StoryFn, StoryObj } from "@storybook/react-vite"
+import { StoryObj } from "@storybook/react-vite"
+import type { Decorator } from "@storybook/react-vite"
 import { expect, within } from "storybook/test"
 import { CheckDouble, ExternalLink } from "@/icons/app"
 import { WithDataTestIdProps } from "@/lib/data-testid"
@@ -54,7 +55,7 @@ const meta = {
     },
   },
   decorators: [
-    (Story: StoryFn) => (
+    (Story: Parameters<Decorator>[0]) => (
       <div className="w-96">
         <Story />
       </div>

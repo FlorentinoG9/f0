@@ -7,7 +7,7 @@ export interface DashboardWidgetProps {
   title: string
   draggable?: boolean
   actions?: DropdownItem[]
-  handleRef?: React.RefObject<HTMLDivElement>
+  handleRef?: React.RefObject<HTMLDivElement | null>
   aiButton?: () => void
 }
 

@@ -20,7 +20,7 @@ export type ProgressBarCellValue = number | undefined | ProgressBarValue
 
 export const ProgressBarCell = (
   args: ProgressBarCellValue,
-  _meta: ValueDisplayRendererContext
+  _meta?: ValueDisplayRendererContext
 ) => {
   const resolvedValue = resolveValue<number>(args, "value")
   const isPlaceholder = isShowingPlaceholder(args, "value")

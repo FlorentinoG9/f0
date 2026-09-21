@@ -27,7 +27,7 @@ export type NestedActionRowProps<
   NavigationFilters,
   Grouping
 > & {
-  rowRef: React.RefObject<HTMLTableRowElement>
+  rowRef: React.RefObject<HTMLTableRowElement | null>
   nestedRowPropsOverride: Partial<NestedRowProps>
 }
 
@@ -51,7 +51,7 @@ const NestedActionRowInner = <
   >,
   ref:
     | ((element: HTMLTableRowElement | null) => void)
-    | React.RefObject<HTMLTableRowElement>
+    | React.RefObject<HTMLTableRowElement | null>
     | null
 ) => {
   const internalRef = useRef<HTMLTableRowElement | null>(null)
@@ -118,7 +118,7 @@ export const NestedActionRow = forwardRef(NestedActionRowInner) as <
   > & {
     ref?:
       | ((element: HTMLTableRowElement | null) => void)
-      | React.RefObject<HTMLTableRowElement>
+      | React.RefObject<HTMLTableRowElement | null>
       | null
   }
 ) => ReturnType<typeof NestedActionRowInner>

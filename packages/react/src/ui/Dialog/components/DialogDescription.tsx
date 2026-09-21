@@ -5,7 +5,7 @@ import { forwardRef } from "react"
 import { cn } from "../../../lib/utils"
 
 export const DialogDescription = forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Description>,
+  React.ComponentRef<typeof DialogPrimitive.Description>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description

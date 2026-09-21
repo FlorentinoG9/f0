@@ -10,7 +10,7 @@ export function DraggableF0Card<T = unknown>({
   const ref = useRef<HTMLDivElement | null>(null)
 
   useDraggable<T>({
-    ref: ref as React.RefObject<HTMLElement>,
+    ref: ref as React.RefObject<HTMLElement | null>,
     payload: { kind: drag.type ?? "f0-card", id: drag.id, data: drag.data },
   })
 

@@ -355,7 +355,7 @@ const Container = forwardRef<
     return (
       !!node &&
       !(
-        React.isValidElement(node) &&
+        React.isValidElement<{ children?: React.ReactNode }>(node) &&
         node.type === React.Fragment &&
         React.Children.count(node.props.children) === 0
       )

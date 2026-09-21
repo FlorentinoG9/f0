@@ -14,7 +14,7 @@ import { useF0MeetingBindings } from "./F0MeetingProvider"
  */
 export const useTrackBinding = <T extends HTMLMediaElement>(
   track: F0MeetingTrack | undefined
-): React.RefObject<T> => {
+): React.RefObject<T | null> => {
   const bindingsRef = useF0MeetingBindings()
   const ref = useRef<T>(null)
   const bindingKey = track?.bindingKey

@@ -1,3 +1,4 @@
+import type { JSX } from "react"
 import { useMemo } from "react"
 import { F0Card } from "@/components/F0Card"
 import { PageHeader } from "@/experimental/Navigation/Header/PageHeader"

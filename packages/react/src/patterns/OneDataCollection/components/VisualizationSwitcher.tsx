@@ -1,3 +1,4 @@
+import type { JSX } from "react"
 import { F0SegmentedControl } from "@/experimental/Actions/F0SegmentedControl"
 import { GroupingDefinition, RecordType } from "@/hooks/datasource"
 import { useI18n } from "@/lib/providers/i18n"

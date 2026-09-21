@@ -367,5 +367,7 @@ export type TableCustomizationProps<
 /** The `ref` a table row accepts, as callback or object. */
 export type TableRowRef =
   | ((element: HTMLTableRowElement | null) => void)
-  | RefObject<HTMLTableRowElement>
+  // React 19 narrowed `RefObject<T>` to a non-null `current`; a row ref comes
+  // from `useRef<HTMLTableRowElement>(null)`, so the element stays nullable.
+  | RefObject<HTMLTableRowElement | null>
   | null

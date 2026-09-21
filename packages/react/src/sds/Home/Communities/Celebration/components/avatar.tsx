@@ -12,7 +12,7 @@ type CelebrationAvatarProps = {
   canReact: boolean
   lastEmojiReaction?: string
   onReactionSelect?: (emoji: string) => void
-  pickerRef?: RefObject<HTMLDivElement>
+  pickerRef?: RefObject<HTMLDivElement | null>
 }
 
 export function CelebrationAvatar({
