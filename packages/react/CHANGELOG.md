@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.15.0](https://github.com/factorialco/f0/compare/f0-react-v7.14.0...f0-react-v7.15.0) (2026-09-21)
+
+
+### Features
+
+* **F0Chat:** mark messages drafted with One ([#5499](https://github.com/factorialco/f0/issues/5499)) ([c8659fc](https://github.com/factorialco/f0/commit/c8659fcd843902ad9fee51d30e3cd9686e891f9b))
+
 ## [7.14.0](https://github.com/factorialco/f0/compare/f0-react-v7.13.0...f0-react-v7.14.0) (2026-09-21)
 
 
