@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.10.0](https://github.com/factorialco/f0/compare/f0-react-v7.9.0...f0-react-v7.10.0) (2026-09-21)
+
+
+### Features
+
+* **react:** lint against nondeterministic story accessible names ([#5590](https://github.com/factorialco/f0/issues/5590)) ([7b8907c](https://github.com/factorialco/f0/commit/7b8907c44b55ffacccdcafef481627660c218a95))
+
 ## [7.9.0](https://github.com/factorialco/f0/compare/f0-react-v7.8.2...f0-react-v7.9.0) (2026-09-21)
 
 
