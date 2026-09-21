@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.8.2](https://github.com/factorialco/f0/compare/f0-react-v7.8.1...f0-react-v7.8.2) (2026-09-21)
+
+
+### Bug Fixes
+
+* **RichText:** keep the mention popover inside the editor's React tree ([#5600](https://github.com/factorialco/f0/issues/5600)) ([0b762be](https://github.com/factorialco/f0/commit/0b762be94f2a57dc2dea7925292905e9ecae881d))
+
 ## [7.8.1](https://github.com/factorialco/f0/compare/f0-react-v7.8.0...f0-react-v7.8.1) (2026-09-21)
 
 
