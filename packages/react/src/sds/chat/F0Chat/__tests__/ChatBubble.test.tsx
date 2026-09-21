@@ -368,6 +368,63 @@ describe("ChatBubble meta cluster", () => {
     )
   })
 
+  it("puts 'drafted with One' in the meta cluster of an AI-assisted message", () => {
+    render(
+      <ChatBubble
+        message={{ ...makeMessage("Reminder: timesheets"), aiAssisted: true }}
+        isMine
+      />
+    )
+    expect(screen.getByTestId("chat-message-time")).toHaveTextContent(
+      `drafted with One · ${nowClock}`
+    )
+  })
+
+  it("orders the cluster as origin, edited, time", () => {
+    render(
+      <ChatBubble
+        message={{
+          ...makeMessage("Reminder: timesheets"),
+          aiAssisted: true,
+          editedAt: now,
+        }}
+        isMine
+      />
+    )
+    expect(screen.getByTestId("chat-message-time")).toHaveTextContent(
+      `drafted with One · edited · ${nowClock}`
+    )
+  })
+
+  it("repeats 'drafted with One' for assistive tech in reading order", () => {
+    const { container } = render(
+      <ChatBubble
+        message={{ ...makeMessage("Reminder: timesheets"), aiAssisted: true }}
+        isMine
+      />
+    )
+    expect(container.querySelector(".sr-only")).toHaveTextContent(
+      `drafted with One · ${nowClock}`
+    )
+  })
+
+  it("drops both 'drafted with One' and 'edited' on a deleted tombstone", () => {
+    render(
+      <ChatBubble
+        message={{
+          ...makeMessage(""),
+          deleted: true,
+          aiAssisted: true,
+          editedAt: now,
+        }}
+        isMine
+      />
+    )
+    expect(screen.getByTestId("chat-message-time")).toHaveTextContent(
+      new RegExp(`^${nowClock}$`)
+    )
+  })
+
   it("does not show 'edited' on a deleted tombstone", () => {
     render(
       <ChatBubble

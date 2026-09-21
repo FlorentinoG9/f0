@@ -643,6 +643,7 @@ export const defaultTranslations = {
     edit: "Edit",
     editing: "Editing",
     edited: "edited",
+    aiAssisted: "drafted with One",
     cancelEdit: "Cancel edit",
     saveEdit: "Save",
     you: "You",
