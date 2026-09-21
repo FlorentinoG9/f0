@@ -4,6 +4,7 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { Check, ChevronRight, Circle } from "lucide-react"
 import * as React from "react"
 import { F0Icon } from "@/components/F0Icon/F0Icon"
+import { usePortalContainer } from "../lib/portal-container"
 import { cn } from "../lib/utils"
 
 const DropdownMenu = DropdownMenuPrimitive.Root
@@ -60,26 +61,32 @@ const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content> & {
     /**
-     * Portal target. Defaults to `document.body`; set it to a fullscreened
-     * element so the menu renders inside the top layer (Radix portals to the
-     * body otherwise, which is hidden while an ancestor is fullscreen).
+     * Portal target. Defaults to the nearest `PortalContainerProvider`, then
+     * `document.body`; set it to a fullscreened element so the menu renders
+     * inside the top layer (Radix portals to the body otherwise, which is
+     * hidden while an ancestor is fullscreen).
      */
     container?: HTMLElement | null
   }
->(({ className, sideOffset = 4, container, ...props }, ref) => (
-  <DropdownMenuPrimitive.Portal container={container ?? undefined}>
-    <DropdownMenuPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      className={cn(
-        "z-50 min-w-[--radix-popper-anchor-width] overflow-hidden rounded-md border border-solid border-f1-border-secondary bg-f1-background text-f1-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-        "origin-[var(--radix-dropdown-menu-content-transform-origin)]",
-        className
-      )}
-      {...props}
-    />
-  </DropdownMenuPrimitive.Portal>
-))
+>(({ className, sideOffset = 4, container, ...props }, ref) => {
+  const defaultContainer = usePortalContainer()
+  return (
+    <DropdownMenuPrimitive.Portal
+      container={container ?? defaultContainer ?? undefined}
+    >
+      <DropdownMenuPrimitive.Content
+        ref={ref}
+        sideOffset={sideOffset}
+        className={cn(
+          "z-50 min-w-[--radix-popper-anchor-width] overflow-hidden rounded-md border border-solid border-f1-border-secondary bg-f1-background text-f1-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          "origin-[var(--radix-dropdown-menu-content-transform-origin)]",
+          className
+        )}
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
+  )
+})
 DropdownMenuContent.displayName = DropdownMenuPrimitive.Content.displayName
 
 const DropdownMenuItem = React.forwardRef<

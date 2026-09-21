@@ -1,0 +1,462 @@
+import { Canvas, Meta, Unstyled } from "@storybook/addon-docs/blocks"
+import LinkTo from "@storybook/addon-links/react"
+import * as Stories from "./F0Meeting.stories"
+
+<Meta of={Stories} />
+
+# F0Meeting
+
+F0Meeting renders a transport-agnostic video room. The host provides
+participants, tracks, connection state and the actions that change them through
+`F0MeetingRuntime`; F0 owns the grid, the controls and the window.
+
+F0 never imports a transport SDK — not even for types. A unit test fails if one
+appears, because the coupling comes back the moment somebody needs a LiveKit
+type "just for a second", and by then every consumer inherits it.
+
+The design notes — why it is shaped this way, how it maps onto LiveKit, and what
+is still open — live in `SPEC.md` next to the component. This page is how to
+use it.
+
+## Anatomy
+
+<Canvas of={Stories.SixParticipants} />
+
+## The runtime
+
+The host builds a plain object and injects it. Two conventions carry most of the
+design:
+
+**Optional actions are capability detection.** Omit `setScreenShareEnabled` and
+the screen-share button does not exist. Omit `startRecording` and there is no
+recording. A host describes what it supports by not passing what it lacks.
+
+**`capabilities` is a different thing: permissions.** Omitting
+`startRecording` means "this deployment has no recording". `canRecord: false`
+means "recording exists, but not for you" — and that renders as a disabled
+control with a reason, not as a control that quietly vanishes.
+
+```ts
+type F0MeetingRuntime = {
+  room: F0MeetingRoomInfo
+  status:
+    | "idle"
+    | "connecting"
+    | "connected"
+    | "reconnecting"
+    | "disconnected"
+    | "error"
+  localParticipantId: string
+  participants: F0MeetingParticipant[]
+  localMedia: F0MeetingLocalMedia
+  signals?: F0MeetingSignalStore
+
+  leave: () => void | Promise<void>
+  setMicrophoneEnabled: (enabled: boolean) => void | Promise<void>
+  setCameraEnabled: (enabled: boolean) => void | Promise<void>
+
+  setScreenShareEnabled?: (enabled: boolean) => void | Promise<void>
+  setHandRaised?: (raised: boolean) => void | Promise<void>
+  transcript?: F0MeetingTranscriptSegment[]
+  notes?: string
+  setNotes?: (value: string) => void
+  reconnect?: () => void | Promise<void>
+
+  capabilities?: F0MeetingCapabilities
+}
+```
+
+Not everything in `types.ts` is rendered yet. Recording control, moderation,
+reactions, `subtitle`, `isAgent`, `raisedHandAt` (other people's), and
+`room.origin` are declared in the contract and read by nothing — see
+[Declared, not rendered yet](#declared-not-rendered-yet) below before relying on
+one.
+
+### Tracks are bound, not handed over
+
+A track reaches F0 as a `binding` — a function that attaches a media element F0
+created — plus a `bindingKey`.
+
+```ts
+type F0MeetingBinding = (element: HTMLMediaElement) => () => void
+
+// factorial → LiveKit
+const binding = (el) => {
+  track.attach(el)
+  return () => track.detach(el)
+}
+```
+
+Going through the transport's own `attach` is what keeps adaptive stream and
+dynacast working: LiveKit watches the attached element's size and visibility to
+choose a simulcast layer and to pause off-screen tracks. Assigning `srcObject`
+directly would silently request the highest layer for everyone — with thirty
+participants, the difference between a few Mbps and tens of them.
+
+The `bindingKey` exists because hosts rebuild the runtime, and every closure in
+it, on each transport event. F0 re-attaches only when that key changes — or when
+a binding first appears under it, for a stream that opens late — so
+republishing a source works while ordinary churn does not black-flash the video.
+
+### High-frequency signals bypass React
+
+Audio levels, speaking changes and connection quality arrive at 10–20 Hz per
+participant. They travel through `F0MeetingSignalStore` — an external store read
+with `useSyncExternalStore` — and are subscribed to by the leaf components that
+draw them. A burst of audio repaints five `<div>`s rather than the room.
+
+F0 exports the factory so a host only writes setters:
+
+```ts
+const signals = createMeetingSignalStore()
+room.on("activeSpeakersChanged", (speakers) =>
+  signals.setSpeaking(speakers.map((s) => s.identity))
+)
+```
+
+Inside F0, `useMeetingSignal(participantId, selector?)` lets a leaf watch one
+field: the quality bars subscribe to `quality` and sit out every audio level.
+
+## The grid
+
+Tiles are positioned absolutely from a solver rather than laid out with CSS
+grid. That is deliberate: it lets a re-solve animate `x/y/width/height`
+directly, where a FLIP would animate `scale` and visibly warp the video
+mid-flight.
+
+Each tile takes the shape of its own cell, clamped between portrait (0.6) and
+16:9, and the solver maximises the area of the **smallest** tile. Rows are sized
+independently and each spans the full width, so three people fill the room
+rather than sitting beside an empty square.
+
+<Canvas of={Stories.GridFill} />
+
+The floor a tile may not fall below is container-relative and checked inside the
+search, not after it. Whoever does not clear it goes into the `+N` chip, which
+takes a cell like any other tile — never a `+1`, since a chip standing for one
+person costs the same cell as their face and tells you less.
+
+<Canvas of={Stories.ThirtyParticipants} />
+
+<Canvas of={Stories.FiftyParticipants} />
+
+Density, gap, corner radius and the name label all follow the measured room, so
+the same design survives a 320px floating window and a 2560px screen.
+
+<Canvas of={Stories.ResponsiveRoom} />
+
+<Canvas of={Stories.Portrait} />
+
+<Canvas of={Stories.MinimumFloatingSize} />
+
+<Canvas of={Stories.Ultrawide} />
+
+<Canvas of={Stories.TinyContainer} />
+
+<Canvas of={Stories.LongNames} />
+
+### The escape hatch
+
+Cameras render `object-cover`, so a squarer tile crops the sides — fine for a
+centred face, not for someone signing. `F0MeetingParticipant.preventCrop`
+letterboxes that person instead.
+
+<Canvas of={Stories.PreventCrop} />
+
+### Screen share and spotlight
+
+A spotlight means the room is focused on something — a pin, or a screen share
+the auto-focus picked up. It is never a fallback for a big room. A share takes
+the whole stage and letterboxes inside its own tile, so the black is exactly the
+part of the picture that is missing.
+
+<Canvas of={Stories.ScreenShare} />
+
+Focus is an intent, not a key: `auto`, `pinned`, or `none`. That third state is
+what lets the user dismiss a spotlight without the auto rule putting it straight
+back.
+
+<Canvas of={Stories.ScreenShareInGrid} />
+
+To share your own screen against the real `getDisplayMedia` picker, open{" "}
+<LinkTo kind="F0Meeting" story="Share Your Screen">
+  Share your screen
+</LinkTo>
+.
+
+### Presence
+
+`presence: "invited"` is someone the call is waiting for. They hold a tile that
+says so, publish nothing and do not count toward the people in the call.
+
+<Canvas of={Stories.Presence} />
+
+<Canvas of={Stories.AddAndRemovePeople} />
+
+## Surface modes
+
+The room is hosted by one window that never unmounts, in a portal on
+`document.body`. It lives outside the application frame deliberately: the
+frame's root is `overflow-hidden` and contains transformed elements, and a
+transformed ancestor breaks `position: fixed` for everything under it.
+
+| Mode         | What it is                                                                                                                                                                                        |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `fullscreen` | The only modal mode. Everything else on the page is made `inert` — unfocusable and out of the accessibility tree; there is no focus trap. `Escape` returns to `floating` and never hangs up        |
+| `panel`      | Docked as the application frame's side panel, on the left of the content, which narrows for it. Only offered where a frame registers a slot; standalone it derives to `floating`                  |
+| `floating`   | Draggable and resizable window. Not modal: you keep using the app                                                                                                                                 |
+| `minimized`  | The same window at pill size, with only the pinned actions. Derived below the `md` breakpoint; it has no button of its own                                                                        |
+| `inline`     | For a dedicated page. `<F0MeetingSlot />` publishes its rect and the window animates to it — teleport by measurement, so nothing is ever reparented                                               |
+| `pip`        | Where the browser puts the call when you leave the tab: an OS-level Document Picture-in-Picture window (Chromium 116+) with the grid and the full control bar. Nobody chooses it, it is never persisted, and closing it returns to the mode it left from |
+
+The switch in the header is a `role="group"` of plain buttons, not a toggle
+group: it offers only the destinations, and the mode you are in is omitted, so
+there is never a button that does nothing.
+
+<Canvas of={Stories.FloatingWindow} />
+
+The window stores an anchored placement (`corner` plus offsets) rather than
+coordinates, so shrinking the browser keeps it glued to its corner instead of
+leaving it off-screen. Below the `md` breakpoint dragging is not mounted at all
+and the window becomes a full-width pill.
+
+The other modes cover the whole page, so they are not embedded here:{" "}
+<LinkTo kind="F0Meeting" story="Minimized Pill">
+  Minimized pill
+</LinkTo>
+,{" "}
+<LinkTo kind="F0Meeting" story="Fullscreen">
+  Fullscreen
+</LinkTo>{" "}
+and{" "}
+<LinkTo kind="F0Meeting" story="Side Panel">
+  Side panel
+</LinkTo>{" "}
+(which, standalone, falls back to floating — the docked call is in the
+ApplicationFrame stories).
+
+Picture-in-picture is not a destination, and there is no button for it. Like
+Meet, it is where the call goes when you leave the tab, whatever mode it was
+in: Chromium fires the Media Session `enterpictureinpicture` action and the
+room portals into a Document Picture-in-Picture window (Chromium 116+) — the
+same grid and the same `md` control bar, in a window the OS keeps on top — and
+closes it again when you come back. The tab keeps the `<audio>` elements and
+the live region, so nothing you hear is interrupted by the move; the `<video>`
+elements do remount, which is the one deliberate exception to the "never
+remount a video" rule. Browsers with only the classic video PiP float the
+focused tile's `<video>` instead, with the room staying put; browsers with
+neither do nothing, and `pictureInPicture={false}` turns it off everywhere.
+The window's overlays — the device picker, tooltips — open inside it through
+`PortalContainerProvider`, which the `ui` primitives read as their default
+portal target. There is no story for it: entering needs the browser's own
+gesture, from a page that is capturing a camera or a microphone. The huddle
+in the ApplicationFrame stories qualifies — its mock captures the mic when
+the call connects (`captureMicrophone` in the seed) — so start one there and
+switch tab.
+
+## The side panel
+
+`sidePanel` is `{ tabs, defaultTabId }` rather than a bare `ReactNode`: F0 owns
+whether the panel is open, because the button that opens it lives in F0's own
+control bar and needs the tab labels and the unread badge. Only the selected tab
+is mounted. It is fullscreen-only — at 420px it would leave the video a sliver
+anywhere else — and its accessible name is the active tab's label.
+
+```tsx
+const sidePanel: F0MeetingSidePanel = {
+  defaultTabId: "chat",
+  tabs: [
+    { id: "chat", label: "Chat", badge: 2, content: <MeetingRoomChat … /> },
+    { id: "transcript", label: "Transcript", content: <MeetingTranscript … /> },
+    { id: "notes", label: "Notes", content: <MeetingNotes … /> },
+  ],
+}
+```
+
+`MeetingRoomChat`, `MeetingTranscript` and `MeetingNotes` are exported for the
+usual three tabs. The chat is deliberately plainer than `F0Chat`: in production
+it rides on LiveKit's data channel, which delivers a string and forgets it.
+
+<Canvas of={Stories.WithSidePanel} />
+
+## Anchoring to the ApplicationFrame
+
+```tsx
+<ApplicationFrame
+  sidebar={sidebar}
+  ai={{ enabled: true }}
+  meeting={{ runtime, defaultMode: "floating", actions }}
+>
+  {children}
+</ApplicationFrame>
+```
+
+`runtime: null` means there is no call and nothing mounts. A floating huddle
+runs happily beside an open conversation. The one thing the call and the chat
+cannot share is the frame's side panel: the call is in `panel` mode exactly
+while it owns the panel's content, and anything that takes the slot — the AI
+chat opening, a conversation being presented, the panel being closed — pops the
+call out to `floating` rather than fighting for the space.
+
+<Canvas of={Stories.InApplicationFrame} />
+
+## The action bar
+
+F0 synthesizes the core actions from the runtime — microphone, camera, screen
+share, raise hand, chat, leave — already applying `capabilities`. Host actions
+are merged **by id**, so reusing a core id patches it rather than adding a
+duplicate:
+
+```tsx
+actions={[
+  { id: "core:microphone", label: "Silence me" },   // patch: id + what changes
+  { id: "notes", label: "Notes", icon: Notes, group: "collab" },
+]}
+```
+
+Collapse is deterministic and driven by the bar's own measured width, not the
+viewport, so it behaves the same in fullscreen and in a 300px window. Ranking by
+`pinned` and `priority` decides what survives; the survivors render in their
+original order, so controls never swap places as the window resizes.
+
+<Canvas of={Stories.CustomActions} />
+
+## States
+
+`reconnecting` keeps the tiles mounted and freezes the last frame — clearing the
+grid for a two-second ICE restart reads as the call having dropped. A denied
+permission is a state, not an exception: the control is disabled with a reason.
+
+<Canvas of={Stories.Reconnecting} />
+
+<Canvas of={Stories.PermissionDenied} />
+
+## Theme and direction
+
+<Canvas of={Stories.Dark} />
+
+<Canvas of={Stories.RTL} />
+
+## Accessibility
+
+- One polite live region for the whole call, mounted once in the portal so it
+  survives every mode. It announces who joined, who left, where the call went
+  and where the window was dropped — throttled to one message per two seconds,
+  a burst coalescing to the last one.
+- Fullscreen makes the rest of the page `inert`; it does not trap focus.
+- Mic and camera are real toggles (`aria-pressed`), the mode switch is a
+  `role="group"` of buttons, and the side panel is named after its active tab.
+
+## Props
+
+<Unstyled>
+  <table className="mb-8 w-full dark:text-f1-foreground-inverse/80">
+    <thead>
+      <tr>
+        <th className="text-left">Prop</th>
+        <th className="text-left">Type</th>
+        <th className="text-left">Default</th>
+        <th className="text-left">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>`runtime`</td>
+        <td>`F0MeetingRuntime | null`</td>
+        <td>—</td>
+        <td>The call. `null` means no meeting: nothing mounts.</td>
+      </tr>
+      <tr>
+        <td>`actions`</td>
+        <td>`F0MeetingActionInput[] | (runtime) => F0MeetingActionInput[]`</td>
+        <td>`[]`</td>
+        <td>Host actions, merged by id with the synthesized core ones.</td>
+      </tr>
+      <tr>
+        <td>`actionOrder`</td>
+        <td>`string[]`</td>
+        <td>—</td>
+        <td>Explicit left-to-right order. Unlisted ids keep their slot.</td>
+      </tr>
+      <tr>
+        <td>`defaultMode`</td>
+        <td>`"fullscreen" | "panel" | "floating" | "minimized" | "inline"`</td>
+        <td>`"fullscreen"`</td>
+        <td>
+          Mode a new meeting opens in. The mode of the same call is remembered
+          across reloads; a different call starts here. Never `pip`: nobody
+          chooses that one, the browser does.
+        </td>
+      </tr>
+      <tr>
+        <td>`pictureInPicture`</td>
+        <td>`boolean`</td>
+        <td>`true`</td>
+        <td>
+          Whether the browser may move the call into its picture-in-picture
+          window when the tab is left. There is no button for it; `false`
+          turns it off. Nothing happens on a browser without either PiP API.
+        </td>
+      </tr>
+      <tr>
+        <td>`sidePanel`</td>
+        <td>`F0MeetingSidePanel` — `{ tabs, defaultTabId? }`</td>
+        <td>—</td>
+        <td>
+          Tabs of the in-call side panel. Each tab is `{ id, label, content,
+          badge? }`. Fullscreen-only.
+        </td>
+      </tr>
+      <tr>
+        <td>`headerContent`</td>
+        <td>`ReactNode`</td>
+        <td>—</td>
+        <td>Host content in the window header.</td>
+      </tr>
+      <tr>
+        <td>`overlay`</td>
+        <td>`ReactNode`</td>
+        <td>—</td>
+        <td>Host content above the room (banners, upsells).</td>
+      </tr>
+    </tbody>
+  </table>
+</Unstyled>
+
+## Declared, not rendered yet
+
+These fields are in the contract so an adapter can fill them in once, and
+nothing in the room reads them yet. Do not expect them to show up:
+
+- `F0MeetingParticipant.subtitle`, `isAgent`, `isConnecting`
+- `F0MeetingParticipant.raisedHandAt` for anyone but you (your own
+  `core:raiseHand` toggle reads it)
+- `F0MeetingRoomInfo.origin`
+- Reactions: `sendReaction`, `reactions`
+- Recording **control**: `startRecording`, `stopRecording`, `canRecord` — the
+  recording _state_ does render as a banner
+- Moderation: `muteParticipant`, `removeParticipant`, `canMuteOthers`,
+  `canRemoveParticipants`, `canModerate`
+- `disconnectReason`
+
+## Developing against the mock
+
+There is no LiveKit adapter yet, so the mock is the bench. It uses your real
+camera for the local tile and re-renders that same feed with a different crop
+and hue for each remote participant, so the room is full of genuinely human
+video without shipping any assets. Voices are synthesized with WebAudio and
+**measured** with an `AnalyserNode`, so the waveform and the speaking glow
+respond to real audio with real latency — which is the only way to tell whether
+the render isolation actually holds.
+
+```tsx
+const { runtime, drivers } = useMockMeetingRuntime(sixPeopleSeed)
+// drivers.enableLocalCamera() — from a user gesture, never on mount
+// drivers.simulateReconnect(4000) / denyPermission("camera") / startScreenShare(id)
+// drivers.join(person) / leave(id) / admit(id)
+
+// For a snapshot: nothing moves, nobody speaks, the timer has no start.
+const still = deterministic(sixPeopleSeed, { cameras: "static" })
+```
+
+<Canvas of={Stories.WithRealCamera} />
