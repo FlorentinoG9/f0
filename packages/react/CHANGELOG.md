@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.9.0](https://github.com/factorialco/f0/compare/f0-react-v7.8.2...f0-react-v7.9.0) (2026-09-21)
+
+
+### Features
+
+* **OneDataCollection:** let a list row tint its icon glyph ([#5599](https://github.com/factorialco/f0/issues/5599)) ([5492044](https://github.com/factorialco/f0/commit/549204449d71de617812e3ddd63336025e12e5b8))
+
 ## [7.8.2](https://github.com/factorialco/f0/compare/f0-react-v7.8.1...f0-react-v7.8.2) (2026-09-21)
 
 
