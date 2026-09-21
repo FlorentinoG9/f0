@@ -26,6 +26,10 @@
       "error",
       { "allow": ["src/ui/chart.tsx", "src/kits/ai/F0AiPong/F0AiPong.tsx"] }
     ],
+    // A story accessible name must not move between runs, or the aria-surface
+    // check reports a rename on every PR. The rule scopes itself to story
+    // sources and only fires where the value reaches a name.
+    "f0-stories/no-nondeterministic-story-accessible-names": "error",
 
     // eslint:recommended rules that oxlint does not put in `correctness`.
     "curly": "error",
@@ -413,6 +417,7 @@
     "./.oxlint-plugins/f0-styles/index.js",
     "./.oxlint-plugins/f0-i18n/index.js",
     "./.oxlint-plugins/f0-react/index.js",
+    "./.oxlint-plugins/f0-stories/index.js",
     "eslint-plugin-sonarjs",
     {
       "name": "import-js",

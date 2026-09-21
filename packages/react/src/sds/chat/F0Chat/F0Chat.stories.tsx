@@ -33,6 +33,28 @@ const ana: F0ChatUser = {
   subtitle: "Product Designer",
 }
 
+/**
+ * A fixed *time of day* for the story fixtures below — today's date, pinned
+ * clock. Deliberately not a pinned instant.
+ *
+ * A bubble renders `createdAt` through `formatClock` (`timeStyle: "short"`),
+ * and that string is part of the message's accessible name — so a plain
+ * `new Date()` renamed every fixture message on every CI run. Only the time of
+ * day ever reaches the name, never the date, so pinning the clock settles it.
+ *
+ * The date has to keep tracking today, though: the mock runtime gives the demo
+ * a 24h `editWindowMs`, and `canEditChatMessage` hides the "Edit" action on
+ * anything older — which the UnicodeMentionEditing play test drives. Keeping
+ * today's date also keeps the day separator reading "Today" rather than
+ * flipping with the hour the job happens to run at.
+ */
+const STORY_NOW = ((): Date => {
+  const at = new Date()
+  at.setHours(10, 25, 0, 0)
+  return at
+})()
+const SENT_AT = STORY_NOW.toISOString()
+
 const paletteRuntime: F0ChatRuntime = {
   currentUserId: "me",
   channel: {
@@ -247,7 +269,7 @@ const GroupConversation = (): ReactNode => {
         id: "mention-self",
         author: bruno,
         body: "Heads up @Me, the report is ready 🙌",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: false,
         mentions: [{ id: "me", name: "Me" }],
       },
@@ -255,7 +277,7 @@ const GroupConversation = (): ReactNode => {
         id: "mention-everyone",
         author: anaG,
         body: "@here standup moved to 11:00 🕚",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: false,
         mentionedEveryone: true,
       },
@@ -264,7 +286,7 @@ const GroupConversation = (): ReactNode => {
         id: "mention-other",
         author: anaG,
         body: "@Bruno Martínez can you take the deploy?",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: false,
         mentions: [
           {
@@ -304,7 +326,7 @@ const UnicodeMentionConversation = (): ReactNode => {
         id: "unicode-edit-accent",
         author: me,
         body: "Before @Garci\u0301a, after",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: true,
         mentions: [{ id: unicodeNfc.id, name: unicodeNfc.name }],
       },
@@ -312,7 +334,7 @@ const UnicodeMentionConversation = (): ReactNode => {
         id: "unicode-distinct-identities",
         author: me,
         body: "Two people: @Garc\u00EDa and @Garci\u0301a",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: true,
         mentions: [unicodeNfc, unicodeNfd],
       },
@@ -320,7 +342,7 @@ const UnicodeMentionConversation = (): ReactNode => {
         id: "unicode-edit-hangul",
         author: me,
         body: "Hangul: @\u1100\u1161\u11A8, ready",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: true,
         mentions: [{ id: unicodeHangul.id, name: unicodeHangul.name }],
       },
@@ -659,7 +681,7 @@ const CompactVoiceConversation = (): ReactNode => {
         id: "compact-voice",
         author: ana,
         body: "",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: false,
         attachments: [
           {
@@ -745,7 +767,9 @@ const membershipButton =
  * callback opens an F0Dialog owned by the story (not F0Chat).
  */
 const MembershipConversation = (): ReactNode => {
-  const hourAgo = (h: number) => new Date(Date.now() - h * 3600_000)
+  // Offsets from the pinned clock above, not from the real one: these render
+  // as message timestamps, which are part of each bubble's accessible name.
+  const hourAgo = (h: number) => new Date(STORY_NOW.getTime() - h * 3600_000)
   const runtime = useMockChatRuntime({
     channel: { ...groupChannel, id: "grp-membership" },
     me,
@@ -877,7 +901,7 @@ const DocumentConversation = (): ReactNode => {
         id: "doc-1",
         author: ana,
         body: "Here's the quarterly report 📄",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: false,
         attachments: [
           {
@@ -892,7 +916,7 @@ const DocumentConversation = (): ReactNode => {
         id: "doc-2",
         author: me,
         body: "Thanks! Sending the raw data too",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: true,
         status: "read",
         attachments: [
@@ -915,7 +939,7 @@ const DocumentConversation = (): ReactNode => {
         id: "doc-3",
         author: ana,
         body: "And the offer draft + release notes",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: false,
         attachments: [
           {
@@ -943,7 +967,7 @@ const DocumentConversation = (): ReactNode => {
         id: "doc-4",
         author: me,
         body: "The deck stays as a chip (no client-side preview for ppt)",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: true,
         status: "read",
         attachments: [
@@ -985,7 +1009,7 @@ const VideoConversation = (): ReactNode => {
         id: "video-1",
         author: ana,
         body: "Two cuts from today’s walkthrough",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: false,
         attachments: [
           {
@@ -1097,7 +1121,7 @@ const SinglePhotoConversation = (): ReactNode => {
       id: `single-photo-${index}`,
       author: ana,
       body,
-      createdAt: new Date().toISOString(),
+      createdAt: SENT_AT,
       isMine: false,
       attachments: [
         {
@@ -1178,7 +1202,7 @@ const LinkPreviewConversation = (): ReactNode => {
           id: `link-preview-${index}`,
           author: ana,
           body,
-          createdAt: new Date().toISOString(),
+          createdAt: SENT_AT,
           isMine: false,
           linkPreviews: [
             {
@@ -1196,7 +1220,7 @@ const LinkPreviewConversation = (): ReactNode => {
         id: "link-preview-stack",
         author: ana,
         body: "Two links stack as compact rows, whatever their images are",
-        createdAt: new Date().toISOString(),
+        createdAt: SENT_AT,
         isMine: false,
         linkPreviews: [
           {
