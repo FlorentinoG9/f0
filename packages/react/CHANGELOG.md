@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.13.0](https://github.com/factorialco/f0/compare/f0-react-v7.12.0...f0-react-v7.13.0) (2026-09-21)
+
+
+### Features
+
+* **F0Map:** select the rendering engine through an async provider registry ([#5455](https://github.com/factorialco/f0/issues/5455)) ([5e0eec6](https://github.com/factorialco/f0/commit/5e0eec6ef7e236f59caa1a4222a02d362c82bd39))
+
 ## [7.12.0](https://github.com/factorialco/f0/compare/f0-react-v7.11.0...f0-react-v7.12.0) (2026-09-21)
 
 
