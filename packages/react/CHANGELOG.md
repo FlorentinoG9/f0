@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.12.0](https://github.com/factorialco/f0/compare/f0-react-v7.11.0...f0-react-v7.12.0) (2026-09-21)
+
+
+### Features
+
+* **sidebar:** add permanent module rail to ApplicationFrame ([#5481](https://github.com/factorialco/f0/issues/5481)) ([a5cfe4f](https://github.com/factorialco/f0/commit/a5cfe4f4ecfb005125afa31e7a61b7cd7e508f9c))
+
 ## [7.11.0](https://github.com/factorialco/f0/compare/f0-react-v7.10.0...f0-react-v7.11.0) (2026-09-21)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/factorialco/f0/compare/f0-core-v2.4.0...f0-core-v2.5.0) (2026-09-21)
+
+
+### Features
+
+* **sidebar:** add permanent module rail to ApplicationFrame ([#5481](https://github.com/factorialco/f0/issues/5481)) ([a5cfe4f](https://github.com/factorialco/f0/commit/a5cfe4f4ecfb005125afa31e7a61b7cd7e508f9c))
+
 ## [2.4.0](https://github.com/factorialco/f0/compare/f0-core-v2.3.0...f0-core-v2.4.0) (2026-09-18)
 
 
