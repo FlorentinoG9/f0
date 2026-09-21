@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.0](https://github.com/factorialco/f0/compare/f0-core-v2.5.0...f0-core-v2.6.0) (2026-09-21)
+
+
+### Features
+
+* **meetings:** F0Meeting — headless video room ([#5142](https://github.com/factorialco/f0/issues/5142)) ([93f46bc](https://github.com/factorialco/f0/commit/93f46bc922e2d45dfa6e8d76d75d1408264bcd2c))
+
 ## [2.5.0](https://github.com/factorialco/f0/compare/f0-core-v2.4.0...f0-core-v2.5.0) (2026-09-21)
 
 

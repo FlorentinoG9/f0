@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.14.0](https://github.com/factorialco/f0/compare/f0-react-v7.13.0...f0-react-v7.14.0) (2026-09-21)
+
+
+### Features
+
+* **meetings:** F0Meeting — headless video room ([#5142](https://github.com/factorialco/f0/issues/5142)) ([93f46bc](https://github.com/factorialco/f0/commit/93f46bc922e2d45dfa6e8d76d75d1408264bcd2c))
+
 ## [7.13.0](https://github.com/factorialco/f0/compare/f0-react-v7.12.0...f0-react-v7.13.0) (2026-09-21)
 
 
