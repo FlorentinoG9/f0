@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.8.1](https://github.com/factorialco/f0/compare/f0-react-v7.8.0...f0-react-v7.8.1) (2026-09-21)
+
+
+### Bug Fixes
+
+* **react:** reclaim the actions column when itemActionsOnHover is set ([#5594](https://github.com/factorialco/f0/issues/5594)) ([ce127b1](https://github.com/factorialco/f0/commit/ce127b1ff70c300e1f423c459c4eb5093e7be3a9))
+
 ## [7.8.0](https://github.com/factorialco/f0/compare/f0-react-v7.7.1...f0-react-v7.8.0) (2026-09-18)
 
 
