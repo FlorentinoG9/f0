@@ -10,6 +10,7 @@ import { useIsomorphicLayoutEffect } from "usehooks-ts"
 import { CoachmarkProvider } from "@/experimental/Overlays/F0Coachmark"
 import { FormCardValueFormatterProvider } from "@/kits/ai/F0AiChat/providers/FormCardValueFormatterProvider"
 import type { F0FormLikeComponent } from "@/patterns/F0Form/types"
+import type { F0MapProvider } from "@/patterns/F0Map/providers/names"
 import { ToastProvider } from "../../../hooks/toast/ToastProvider"
 import { ImageContextValue, ImageProvider } from "../../imageHandler"
 import { LinkContextValue, LinkProvider } from "../../linkHandler"
@@ -22,6 +23,7 @@ import { DialogsAlikeLayoutProvider } from "../dialogs-alike/DialogsAlikeLayoutP
 import { FormOverlaysProvider } from "../form-overlays"
 import { I18nProvider, I18nProviderProps } from "../i18n"
 import { L10nProvider, L10nProviderProps } from "../l10n"
+import { MapProvider } from "../map"
 import { UserPlatformProvider } from "../user-platafform"
 import type { HourCycle } from "../user-platafform/types"
 
@@ -120,6 +122,7 @@ export const F0Provider: React.FC<{
    * ```
    */
   formComponent?: F0FormLikeComponent
+  mapEngine?: F0MapProvider
 }> = ({
   children,
   layout,
@@ -134,6 +137,7 @@ export const F0Provider: React.FC<{
   showExperimentalWarnings = false,
   renderDataTestIdAttribute = false,
   formComponent,
+  mapEngine,
 }) => {
   return (
     <MotionProvider>
@@ -168,7 +172,9 @@ export const F0Provider: React.FC<{
                               >
                                 <FormCardValueFormatterProvider>
                                   <CoachmarkProvider>
-                                    {children}
+                                    <MapProvider provider={mapEngine}>
+                                      {children}
+                                    </MapProvider>
                                   </CoachmarkProvider>
                                 </FormCardValueFormatterProvider>
                               </FormComponentContext.Provider>
