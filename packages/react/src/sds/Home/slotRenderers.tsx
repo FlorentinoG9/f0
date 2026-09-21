@@ -702,7 +702,19 @@ export type HomeWidgetRailAction = {
   flashing?: boolean
 }
 
-/** A widget as handed to the layout: header + an ordered list of slots. */
+/**
+ * A widget as handed to the layout: header + an ordered list of slots.
+ *
+ * POINTING AT ONE FROM OUTSIDE (a coachmark, a tour, a test) takes BOTH of the
+ * handles the layout writes, because a widget has two shapes and only ever one
+ * of them is drawn:
+ *
+ * `[data-widget-id="${id}"], [data-widget-glyph="${id}"]`
+ *
+ * The first is its CARD, in an expanded column. The second is its GLYPH in the
+ * collapsed rail — where the card is still mounted but hidden, so a selector
+ * naming only the card resolves to something with no box on screen.
+ */
 export type HomeWidgetItem = HomeWidgetChrome & {
   id: string
   header?: HomeWidgetHeader

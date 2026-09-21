@@ -68,6 +68,34 @@ describe("coachmark overlay", () => {
     expect(blocker()).toHaveAttribute("aria-hidden", "true")
   })
 
+  /**
+   * THE WHOLE PAGE, not most of it. The dim is the lit box inside out — a
+   * spread shadow — and a spread shadow keeps the rounded corners of the shape
+   * it came from, at `spread + radius`. That puts each corner arc's centre
+   * back at the spotlight, so a point is dimmed only if it lies within ONE
+   * SPREAD of it, and the furthest a point can be is the viewport's diagonal.
+   *
+   * `vmax` is the longer side, so the diagonal is at most `sqrt(2)` of it —
+   * about 142vmax. The spread was 100vmax, and a spotlight in one corner left
+   * a pale wedge, cut by the arc, in the corner opposite.
+   */
+  it("dims far enough to reach the corner opposite the spotlight", async () => {
+    renderApp()
+    open({
+      targetElement: "#filters",
+      title: "Filters got smarter",
+      overlay: true,
+    })
+    await screen.findByRole("dialog")
+
+    const dim = blocker()?.firstElementChild as HTMLElement
+    const spread = dim.className.match(/shadow-\[0_0_0_(\d+)vmax_/)?.[1]
+
+    expect(spread).toBeDefined()
+    // The diagonal of a box whose longer side is 100vmax.
+    expect(Number(spread)).toBeGreaterThanOrEqual(Math.ceil(100 * Math.SQRT2))
+  })
+
   it("wiggles the panel at a press that went nowhere", async () => {
     // jsdom has no `Element.animate`, so the wiggle is stubbed in: what is
     // being tested is that a swallowed press is answered ON THE PANEL, since
@@ -532,9 +560,9 @@ describe("how deep the dim goes", () => {
     await screen.findByRole("dialog")
 
     const paint = blocker()?.firstElementChild?.className ?? ""
-    expect(paint).toContain("shadow-[0_0_0_100vmax_hsl(var(--shadow)/0.5)]")
+    expect(paint).toContain("shadow-[0_0_0_200vmax_hsl(var(--shadow)/0.5)]")
     expect(paint).toContain(
-      "dark:shadow-[0_0_0_100vmax_hsl(var(--shadow)/0.85)]"
+      "dark:shadow-[0_0_0_200vmax_hsl(var(--shadow)/0.85)]"
     )
     expect(paint).not.toContain("24px")
     // And the panel gets the extra surface that depth costs it.

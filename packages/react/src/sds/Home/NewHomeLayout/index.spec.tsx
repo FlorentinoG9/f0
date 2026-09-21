@@ -321,6 +321,61 @@ describe("NewHomeLayout", () => {
       ).toBeInTheDocument()
     })
 
+    /**
+     * ONE HANDLE PER SHAPE, so anything pointing at a widget from outside — a
+     * coachmark, a tour — can name it in both. The card keeps `data-widget-id`
+     * and stays mounted while the rail is collapsed, so a selector naming only
+     * the card resolves to something with no box on screen.
+     */
+    test("hands out the collapsed shape of each widget under its own name", () => {
+      renderLayout(1000)
+
+      expect(
+        document.querySelector(`[data-widget-glyph="clock"]`)
+      ).not.toBeNull()
+      expect(
+        document.querySelector(`[data-widget-glyph="events"]`)
+      ).not.toBeNull()
+    })
+
+    test("marks the glyph itself, not a box around the whole strip", () => {
+      renderLayout(1000)
+
+      // The glyph a reader can point at IS the button they would press.
+      expect(document.querySelector(`[data-widget-glyph="events"]`)).toBe(
+        screen.getByRole("button", { name: "events" })
+      )
+    })
+
+    /**
+     * Before the rail knows what its widgets are it puts up placeholders, and a
+     * placeholder has no icon and no title — only an id, which is what
+     * `widgetTitle` falls back to. Its initial was being drawn as the glyph, so
+     * three tiles read "h" (from `home-rail-loading-0`) where the icons go.
+     */
+    test("draws a waiting placeholder as a skeleton, not as a letter", () => {
+      const loading = [
+        { id: "home-rail-loading-0", locked: true, loading: true, slots: [] },
+        { id: "home-rail-loading-1", locked: true, loading: true, slots: [] },
+      ] as unknown as HomeWidgetItem[]
+
+      const { container } = renderLayout(1000, { rightWidgets: loading })
+
+      const strip = container.querySelector("aside.-m-1") as HTMLElement
+      expect(within(strip).getAllByTestId("skeleton")).toHaveLength(2)
+      expect(strip).not.toHaveTextContent("h")
+    })
+
+    // A widget that HAS a face keeps it while its data lands — the skeleton is
+    // for the placeholders that have none, not for every loading widget.
+    test("keeps the icon of a widget that is merely waiting on its data", () => {
+      const waiting = [widget("clock", { loading: true })]
+
+      renderLayout(1000, { rightWidgets: waiting })
+
+      expect(screen.getByRole("button", { name: "clock" })).toBeInTheDocument()
+    })
+
     test("badges the glyph of a widget with updates, and only that one", () => {
       renderLayout(1000)
 
@@ -383,6 +438,22 @@ describe("NewHomeLayout", () => {
      * an icon — so it opens INSTANTLY. On the default wait it was a name you had
      * to stop and ask for, on a control you point at on your way past.
      */
+    /**
+     * A rail action's glyph is a PILL — a reading and the button it belongs to —
+     * so the handle goes on the whole of it. Lighting the button alone would cut
+     * a hole through the middle of one control.
+     */
+    test("carries the widget's collapsed handle on the whole pill", () => {
+      renderLayout(1000, { rightWidgets: ACTION_RAIL })
+
+      const handled = document.querySelector(
+        `[data-widget-glyph="clock"]`
+      ) as HTMLElement
+
+      expect(handled).not.toBeNull()
+      expect(handled).toContainElement(glyph())
+    })
+
     test("names the action without a wait", () => {
       vi.useFakeTimers()
       try {

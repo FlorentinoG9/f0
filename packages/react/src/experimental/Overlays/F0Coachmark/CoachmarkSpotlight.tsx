@@ -227,11 +227,26 @@ export const CoachmarkSpotlight = ({
       // focus glow with it, on the reader's first press anywhere on the page.
       onMouseDown={(event) => event.preventDefault()}
     >
+      {/*
+        THE DIM IS THIS BOX INSIDE OUT: a spread shadow paints everything the
+        lit rect is not.
+
+        THE SPREAD HAS TO CLEAR THE VIEWPORT DIAGONAL, hence 200vmax rather
+        than the 100vmax you would expect to be plenty. A spread shadow keeps
+        the shape it came from, so its corners are rounded too — at radius
+        `spread + radius`, which puts each arc's centre back at the lit box
+        itself. A point is therefore dimmed only if it lies within one spread
+        of the spotlight, and the furthest any point can be is the whole
+        diagonal: up to 142vmax, since vmax is already the longer side. At
+        100vmax a spotlight in one corner left the OPPOSITE corner of the page
+        undimmed — a pale wedge cut by the arc, which reads as a rendering
+        fault rather than as part of the page.
+      */}
       <div
         className={cn(
           "absolute",
-          "shadow-[0_0_0_100vmax_hsl(var(--shadow)/0.5)]",
-          "dark:shadow-[0_0_0_100vmax_hsl(var(--shadow)/0.85)]",
+          "shadow-[0_0_0_200vmax_hsl(var(--shadow)/0.5)]",
+          "dark:shadow-[0_0_0_200vmax_hsl(var(--shadow)/0.85)]",
           travelling &&
             "transition-[top,left,width,height] duration-300 ease-out"
         )}

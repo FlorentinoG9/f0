@@ -25,6 +25,7 @@ import { cn } from "@/lib/utils"
 import { useSidebar } from "@/patterns/ApplicationFrame/FrameProvider"
 import { SidebarIconSvg } from "@/patterns/Navigation/Sidebar/Icon"
 import { Action } from "@/ui/Action"
+import { Skeleton } from "@/ui/skeleton"
 import {
   entranceDelay,
   entranceTransition,
@@ -411,6 +412,11 @@ const RailActionGlyph = ({
               )
             : "rounded-lg"
         )}
+        // THE GLYPH IS THE WIDGET, collapsed — see `data-widget-glyph` on the
+        // plain glyph below. On the whole pill rather than its button, because
+        // the reading and the button are one object: lighting half of it would
+        // cut a hole through the middle of a control.
+        data-widget-glyph={widget.id}
         onMouseEnter={(event) => onOpen(widget.id, event.currentTarget)}
         onMouseLeave={onCancelOpen}
         onFocus={(event) => onOpen(widget.id, event.currentTarget, true)}
@@ -519,6 +525,30 @@ const CollapsedGlyph = ({
     )
   }
 
+  /**
+   * NOTHING TO NAME IT BY YET. A widget waiting on its data still has its own
+   * icon and title, and keeps them — but the placeholders a rail puts up before
+   * it knows what its widgets ARE have neither, and `widgetTitle` falls back to
+   * the id so the strip can always label a glyph. That fallback is an initial,
+   * which on `home-rail-loading-0` is the letter "h": three tiles reading "h"
+   * where the icons are about to be.
+   *
+   * So it draws as what it is — a tile waiting to become one. Not a button
+   * either: there is no widget behind it to float, and its accessible name
+   * would be that same id read out.
+   */
+  if (widget.loading && !widget.icon) {
+    return (
+      <motion.div
+        aria-hidden
+        className="pointer-events-none shrink-0"
+        {...glyphMotion}
+      >
+        <Skeleton className="h-10 w-10 rounded-lg" />
+      </motion.div>
+    )
+  }
+
   return (
     <motion.button
       type="button"
@@ -526,6 +556,13 @@ const CollapsedGlyph = ({
       // a function of its params, and an aria-label needs the text.
       aria-label={widgetTitle(widget)}
       aria-expanded={open}
+      // THE WIDGET, IN THE SHAPE THE COLLAPSED RAIL DRAWS IT. Its card carries
+      // `data-widget-id` and is the thing anyone outside points at — until the
+      // rail collapses, when that card is still mounted but hidden and this
+      // glyph is what is on screen. A separate name rather than a second
+      // `data-widget-id`, which the container queries for its own geometry and
+      // must keep matching exactly one card.
+      data-widget-glyph={widget.id}
       onMouseEnter={(event) => onOpen(widget.id, event.currentTarget)}
       onMouseLeave={onCancelOpen}
       onClick={(event) =>

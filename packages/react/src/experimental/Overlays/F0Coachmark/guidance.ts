@@ -6,6 +6,7 @@ import type {
   CoachmarkStep,
   CoachmarkTarget,
 } from "./types"
+import { resolveTarget } from "./useTargetElement"
 
 /**
  * The attribute a guidance's `anchor()` writes, and the one its steps are
@@ -26,21 +27,18 @@ const DEFAULT_LOOK_FOR_TARGETS_MS = 2000
 const LOOK_FOR_TARGETS_INTERVAL_MS = 50
 
 /**
- * Whether a step has something to point at RIGHT NOW. The same resolution
+ * Whether a step has something to point at RIGHT NOW. Literally the resolution
  * `useTargetElement` does when the coachmark is on screen, asked early — the
  * difference being what the answer is for: there, `null` means "wait for it";
  * here it means "leave this step out".
+ *
+ * Which is why it is that same function rather than a lighter check of its own:
+ * a target that is mounted but not DRAWN has no box to light, so a step kept on
+ * the strength of being in the DOM is a step that opens onto the corner of the
+ * viewport.
  */
-const isOnPage = (step: CoachmarkStep): boolean => {
-  const target = step.targetElement
-  if (target === undefined) {
-    return false
-  }
-  if (typeof target !== "string") {
-    return target.isConnected
-  }
-  return document.querySelector(target) !== null
-}
+const isOnPage = (step: CoachmarkStep): boolean =>
+  step.targetElement !== undefined && resolveTarget(step.targetElement) !== null
 
 /**
  * One step of a walkthrough. It points either at a NAME the guidance knows —
