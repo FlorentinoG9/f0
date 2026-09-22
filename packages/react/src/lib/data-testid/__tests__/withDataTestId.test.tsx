@@ -117,6 +117,36 @@ describe("withDataTestId", () => {
     expect(ref.current).toBeInstanceOf(TestComponent)
   })
 
+  // Regression: React 19 made `ref` an ordinary prop for function components,
+  // so forwarding it unconditionally put `ref: null` into the wrapped
+  // component's props. A component that funnels unknown props into a rest
+  // pattern and spreads them onto its root — how `data-*` normally reaches the
+  // DOM — re-applied that null *after* its own `ref=`, detaching its internal
+  // ref. F0VideoPlayer lost fullscreen to exactly this: the wrapper ref was
+  // null, so the button and the F shortcut both silently no-opped.
+  it("should not detach an internal ref when the caller passes no ref", () => {
+    let seen: HTMLDivElement | null = null
+
+    const TestComponent = ({
+      ...dataAttributes
+    }: React.HTMLAttributes<HTMLDivElement>) => {
+      const innerRef = React.useRef<HTMLDivElement>(null)
+      React.useEffect(() => {
+        seen = innerRef.current
+      })
+      return (
+        <div ref={innerRef} {...dataAttributes}>
+          Test Content
+        </div>
+      )
+    }
+    const WrappedComponent = withDataTestId(TestComponent)
+
+    renderWithProviders(<WrappedComponent dataTestId="test-id" />)
+
+    expect(seen).toBeInstanceOf(HTMLDivElement)
+  })
+
   it("should forward refs for forwardRef components", () => {
     const ref = React.createRef<HTMLDivElement>()
     const TestComponent = forwardRef<
