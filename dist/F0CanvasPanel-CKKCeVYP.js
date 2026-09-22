@@ -279,8 +279,8 @@ const _r2 = /* @__PURE__ */ new Set([
     return l;
   }
   const r = Z((a, o) => {
-    const { dataTestId: s, ...l } = a;
-    return /* @__PURE__ */ i(g5, { dataTestId: s, children: /* @__PURE__ */ i(e, { ...l, ref: o }) });
+    const { dataTestId: s, ...l } = a, u = e, c = o == null ? {} : { ref: o };
+    return /* @__PURE__ */ i(g5, { dataTestId: s, children: /* @__PURE__ */ i(u, { ...l, ...c }) });
   });
   if (fh(e, r), !r.displayName) {
     const a = e.displayName || e.name || "Component";
