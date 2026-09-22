@@ -6,6 +6,7 @@ import {
 } from "motion/react"
 import { useEffect, useId, useRef, useState } from "react"
 import { useOnClickOutside } from "usehooks-ts"
+import { asNonNullRef } from "@/lib/refs"
 import { F0Avatar } from "../../../../components/avatars/F0Avatar"
 import type { AvatarVariant } from "../../../../components/avatars/F0Avatar"
 import { F0Icon } from "../../../../components/F0Icon"
@@ -119,7 +120,7 @@ export const Search = ({
     setActiveIndex(-1)
   }
 
-  useOnClickOutside(ref, () => {
+  useOnClickOutside(asNonNullRef(ref), () => {
     if (open) {
       setOpen(false)
     }

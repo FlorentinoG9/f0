@@ -16,7 +16,7 @@ export type MeasuredBox = { width: number; height: number }
  * at 0×0 and drew nothing.
  */
 export const useMeasuredBox = <T extends HTMLElement>(): [
-  React.RefObject<T>,
+  React.RefObject<T | null>,
   MeasuredBox,
 ] => {
   const ref = useRef<T>(null)

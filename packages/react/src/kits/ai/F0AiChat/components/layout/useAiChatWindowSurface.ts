@@ -5,7 +5,7 @@ import { WIDGET_DRAG_END, WIDGET_DRAG_START } from "@/lib/dnd/widgetDragEvents"
 import { useAiChat } from "../../providers/AiChatStateProvider"
 
 export type AiChatWindowSurface = {
-  surfaceRef: RefObject<HTMLDivElement>
+  surfaceRef: RefObject<HTMLDivElement | null>
   surfaceProps: HTMLAttributes<HTMLDivElement>
   decorations: {
     canDrop: boolean

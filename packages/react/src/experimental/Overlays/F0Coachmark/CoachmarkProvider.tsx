@@ -53,7 +53,7 @@ const ActiveCoachmark = ({
   // THE HANDOVER BETWEEN TWO STEPS. `true` for the fade-out that runs before the
   // next step is committed — see `advanceTo`.
   const [leaving, setLeaving] = useState(false)
-  const handover = useRef<ReturnType<typeof setTimeout>>()
+  const handover = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const reducedMotion = useReducedMotion()
 
   // Clamped rather than indexed directly: `coachmarks.open({ id })` can replace

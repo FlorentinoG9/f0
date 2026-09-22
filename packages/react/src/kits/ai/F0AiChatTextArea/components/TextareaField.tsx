@@ -4,8 +4,8 @@ import { type HighlightSegment } from "../highlight-utils"
 import { TypewriterPlaceholder } from "./TypewriterPlaceholder"
 
 interface TextareaFieldProps {
-  textareaRef: RefObject<HTMLTextAreaElement>
-  highlightRef: RefObject<HTMLDivElement>
+  textareaRef: RefObject<HTMLTextAreaElement | null>
+  highlightRef: RefObject<HTMLDivElement | null>
   inputValue: string
   onInputChange: (value: string, cursorPos: number) => void
   onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void

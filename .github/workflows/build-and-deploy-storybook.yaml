@@ -41,6 +41,13 @@ jobs:
       - name: Build Core
         run: pnpm --filter @factorialco/f0-core build
 
+      - name: Build shadcn Registry
+        # Writes packages/react/public/r/*.json, which Storybook's
+        # `staticDirs: ["../public"]` copies into storybook-static — so the
+        # registry is served from https://one.factorial.dev/r/{name}.json by
+        # the same deploy. Must run before build-storybook.
+        run: pnpm --filter @factorialco/f0-react run registry:build
+
       - name: Build Storybook
         run: pnpm --filter @factorialco/f0-react run build-storybook
 

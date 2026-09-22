@@ -6,7 +6,7 @@ export interface PlayerController extends Omit<
   AudioPlayerControls,
   "play" | "pause"
 > {
-  audioRef: RefObject<HTMLAudioElement>
+  audioRef: RefObject<HTMLAudioElement | null>
   currentSrc: string | undefined
   playbackRates: number[]
   /**

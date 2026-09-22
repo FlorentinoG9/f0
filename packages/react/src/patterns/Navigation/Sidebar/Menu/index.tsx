@@ -126,7 +126,7 @@ const FavoriteItem = ({
 }: {
   item: FavoriteMenuItem
   tooltip?: string
-  dragConstraints?: RefObject<HTMLElement>
+  dragConstraints?: RefObject<HTMLElement | null>
   onRemove?: (item: FavoriteMenuItem) => void
   index: number
   total: number
@@ -292,7 +292,7 @@ const FavoriteItem = ({
 interface CategoryItemProps {
   category: MenuCategory
   isSortable?: boolean
-  dragConstraints?: RefObject<HTMLDivElement>
+  dragConstraints?: RefObject<HTMLDivElement | null>
   onCollapse?: (category: MenuCategory, isOpen: boolean) => void
   onDragEnd?: (categories: MenuCategory[]) => void
   currentOrder?: MenuCategory[]
@@ -462,7 +462,7 @@ function MenuContent({
   nonSortableItems: MenuCategory[]
   sortableItems: MenuCategory[]
   setSortableItems: (items: MenuCategory[]) => void
-  containerRef: RefObject<HTMLDivElement>
+  containerRef: RefObject<HTMLDivElement | null>
   onCollapse?: (category: MenuCategory, isOpen: boolean) => void
   onDragEnd?: (categories: MenuCategory[]) => void
   favorites?: FavoriteMenuItem[]

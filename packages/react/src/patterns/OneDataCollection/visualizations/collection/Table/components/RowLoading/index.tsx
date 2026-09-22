@@ -1,3 +1,4 @@
+import type { JSX } from "react"
 import { forwardRef, useLayoutEffect, useRef } from "react"
 import {
   FiltersDefinition,
@@ -49,7 +50,7 @@ const SingleLoadingRowInner = <
     NavigationFilters,
     Grouping
   > & {
-    rowRef: React.RefObject<HTMLTableRowElement>
+    rowRef: React.RefObject<HTMLTableRowElement | null>
     rowIndex: number
     shouldHideBorder?: boolean
     fromVisualization?: TableVisualizationType
@@ -61,7 +62,7 @@ const SingleLoadingRowInner = <
 
   useLayoutEffect(() => {
     if (loadingRowRef.current && rowRefCurrent) {
-      const height = rowRef.current.getBoundingClientRect().height
+      const height = rowRefCurrent.getBoundingClientRect().height
       loadingRowRef.current.style.height = `${height}px`
     }
   }, [rowRefCurrent, rowRef])
@@ -124,7 +125,7 @@ const SingleLoadingRow = forwardRef(SingleLoadingRowInner) as <
     NavigationFilters,
     Grouping
   > & {
-    rowRef: React.RefObject<HTMLTableRowElement>
+    rowRef: React.RefObject<HTMLTableRowElement | null>
     rowIndex: number
     shouldHideBorder?: boolean
   } & {
@@ -153,7 +154,7 @@ const RowLoadingInner = <
     NavigationFilters,
     Grouping
   > & {
-    rowRef: React.RefObject<HTMLTableRowElement>
+    rowRef: React.RefObject<HTMLTableRowElement | null>
     source: DataCollectionSource<
       R,
       Filters,
@@ -227,7 +228,7 @@ export const RowLoading = forwardRef(RowLoadingInner) as <
     NavigationFilters,
     Grouping
   > & {
-    rowRef: React.RefObject<HTMLTableRowElement>
+    rowRef: React.RefObject<HTMLTableRowElement | null>
     source: DataCollectionSource<
       R,
       Filters,

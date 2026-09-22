@@ -20,7 +20,7 @@ export function DropLaneReorder({
   const laneRef = useRef<HTMLDivElement | null>(null)
 
   useDroppableList({
-    ref: laneRef as React.RefObject<HTMLElement>,
+    ref: laneRef as React.RefObject<HTMLElement | null>,
     id,
     accepts: ["list-card"],
   })

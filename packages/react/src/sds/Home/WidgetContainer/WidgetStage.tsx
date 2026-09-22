@@ -8,7 +8,7 @@ export const WidgetStage = ({
   host?: HTMLElement | null
   children: ReactNode
 }) => {
-  const stageRef = useRef<HTMLDivElement>()
+  const stageRef = useRef<HTMLDivElement | undefined>(undefined)
   if (!stageRef.current) {
     const stage = document.createElement("div")
     stage.style.display = "contents"

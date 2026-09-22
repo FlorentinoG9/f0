@@ -36,8 +36,33 @@ jobs:
   # Detect which projects have changed
   detect-changes:
     uses: ./.github/workflows/_check-workspaces-changes.yaml
+
+  # Chromatic needs a project token, and the `secrets` context is not available
+  # in a job-level `if:` — so the presence check has to happen inside a job and
+  # come back out as an output. Without this, a repository that has no token
+  # (a fork, or any clone that has not been wired up to Chromatic) fails the
+  # build on `Missing project token`: a red check nobody can turn green from
+  # the code, which trains reviewers to ignore a red Chromatic.
+  # Skipping is safe here — the `✅ Chromatic` gate below counts `skipped` as
+  # a pass and only treats failure/cancellation as fatal.
+  detect-token:
+    runs-on: ubuntu-latest
+    outputs:
+      present: ${{ steps.check.outputs.present }}
+    steps:
+      - id: check
+        env:
+          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+        run: |
+          if [ -n "$CHROMATIC_PROJECT_TOKEN" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No CHROMATIC_PROJECT_TOKEN configured; skipping the Chromatic build."
+          fi
+
   chromatic:
-    needs: detect-changes
+    needs: [detect-changes, detect-token]
     # Every clause here exists to keep a build off Chromatic's meter. Snapshots
     # are the billed unit, so a build nobody will look at costs exactly as much
     # as one that catches a regression.
@@ -58,6 +83,7 @@ jobs:
     # `startsWith` guards are inert there and only ever narrow pull requests.
     if: |
       needs.detect-changes.outputs.package_react == 'true' &&
+      needs.detect-token.outputs.present == 'true' &&
       github.event.pull_request.draft != true &&
       !startsWith(github.head_ref, 'release-please--') &&
       !startsWith(github.head_ref, 'published/') &&

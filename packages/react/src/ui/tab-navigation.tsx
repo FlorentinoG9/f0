@@ -16,7 +16,9 @@ function getSubtree(
     return typeof content === "function" ? content(children) : content
   }
 
-  const firstChild = React.Children.only(children) as React.ReactElement
+  const firstChild = React.Children.only(children) as React.ReactElement<{
+    children?: React.ReactNode
+  }>
   return React.cloneElement(firstChild, {
     children:
       typeof content === "function"
@@ -44,7 +46,7 @@ interface TabNavigationProps
     VariantProps<typeof tabNavigationVariants> {}
 
 const TabNavigation = React.forwardRef<
-  React.ElementRef<typeof NavigationMenuPrimitives.Root>,
+  React.ComponentRef<typeof NavigationMenuPrimitives.Root>,
   TabNavigationProps
 >(({ className, children, secondary, ...props }, forwardedRef) => {
   const id = useId()
@@ -99,7 +101,7 @@ interface TabNavigationLinkProps
 }
 
 const _TabNavigationLink = React.forwardRef<
-  React.ElementRef<typeof NavigationMenuPrimitives.Link>,
+  React.ComponentRef<typeof NavigationMenuPrimitives.Link>,
   TabNavigationLinkProps
 >(function TabNavigationLink(
   { asChild, disabled, active, className, children, secondary, ...props },

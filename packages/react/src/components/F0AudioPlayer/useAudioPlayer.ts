@@ -28,7 +28,7 @@ export interface AudioPlayerControls extends AudioPlayerState {
 }
 
 export const useAudioPlayer = (
-  audioRef: RefObject<HTMLAudioElement>,
+  audioRef: RefObject<HTMLAudioElement | null>,
   callbacks: UseAudioPlayerCallbacks = {},
   initialDuration = 0
 ): AudioPlayerControls => {

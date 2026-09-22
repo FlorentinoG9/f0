@@ -5,7 +5,7 @@ import { forwardRef } from "react"
 import { cn } from "../../../lib/utils"
 
 export const DialogOverlay = forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Overlay>,
+  React.ComponentRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay

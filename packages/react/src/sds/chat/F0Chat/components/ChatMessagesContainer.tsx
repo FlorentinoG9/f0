@@ -65,7 +65,7 @@ const dateForRow = (rows: ChatRow[], from: number): string | null => {
 /** Passed to the custom Virtuoso components via the `context` prop. */
 type ChatScrollerContext = {
   /** The scrollbar measure strip — see ChatVirtuosoScroller. */
-  measureStripRef: RefObject<HTMLDivElement>
+  measureStripRef: RefObject<HTMLDivElement | null>
   onListVisibilityChange: (visible: boolean) => void
 }
 

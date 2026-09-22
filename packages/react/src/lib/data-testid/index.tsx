@@ -201,9 +201,19 @@ export const withDataTestId = <T extends React.ComponentType<any>>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Component = component as any
 
+    // `ref` is only forwarded when the caller actually passed one. React 19
+    // turned `ref` into an ordinary prop for function components, so an
+    // unconditional `ref={ref}` injects `ref: null` into the wrapped
+    // component's props. Any component that collects unknown props with a rest
+    // pattern and spreads them onto its root — the usual way `data-*` reaches
+    // the DOM — then re-applies that `null` *after* its own `ref=`, silently
+    // detaching its internal ref. F0VideoPlayer lost fullscreen that way: the
+    // wrapper ref was null, so both the button and the F shortcut no-opped.
+    const refProp = ref == null ? {} : { ref }
+
     return (
       <DataTestIdWrapper dataTestId={dataTestId}>
-        <Component {...rest} ref={ref} />
+        <Component {...rest} {...refProp} />
       </DataTestIdWrapper>
     )
   })

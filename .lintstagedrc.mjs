@@ -13,10 +13,17 @@
 // plain Markdown, which rewrites a multi-line `{/* … */}` JSX comment into
 // `{/_ … _/}` and breaks the Storybook build. oxfmt's ignorePatterns exclude
 // it too, so a manual run cannot corrupt it either.
-// Must mirror the oxfmt ignorePatterns: oxfmt exits non-zero ("Expected at
-// least one target file") when every path it is handed is ignored, which would
-// block a commit that only touches one of these.
-const IGNORED = [/\/CHANGELOG\.md$/, /\/packages\/[^/]+\/package\.json$/]
+// Must mirror everything oxfmt ignores: it exits non-zero ("Expected at least
+// one target file") when every path it is handed is ignored, which would block
+// a commit that only touches one of these. That means the ignorePatterns in
+// .oxfmtrc.json AND oxfmt's own built-in ignores, which are not listed there —
+// lockfiles are the case that bites, since pnpm-lock.yaml matches the yaml glob
+// below but oxfmt refuses to format it.
+const IGNORED = [
+  /\/CHANGELOG\.md$/,
+  /\/packages\/[^/]+\/package\.json$/,
+  /(^|\/)pnpm-lock\.yaml$/,
+]
 const keep = (files) => files.filter((f) => !IGNORED.some((re) => re.test(f)))
 const quote = (files) => files.map((f) => JSON.stringify(f)).join(" ")
 

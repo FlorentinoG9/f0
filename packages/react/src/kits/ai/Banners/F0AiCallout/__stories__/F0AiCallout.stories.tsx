@@ -1,4 +1,5 @@
-import type { Meta, StoryFn, StoryObj } from "@storybook/react-vite"
+import type { Meta, StoryObj } from "@storybook/react-vite"
+import type { ComponentType } from "react"
 import { Summary } from "@/icons/ai"
 import { F0AiCallout } from ".."
 import { aiCalloutStatuses, type F0AiCalloutProps } from "../types"
@@ -220,7 +221,7 @@ export const Statuses: Story = {
  */
 export const Narrow: Story = {
   decorators: [
-    (Story: StoryFn) => (
+    (Story: ComponentType) => (
       <div className="w-72">
         <Story />
       </div>
@@ -398,7 +399,7 @@ export const ReportingCompletedWork: Story = {
 export const ResolutionPlanFlow: Story = {
   parameters: { docs: { story: { inline: true } } },
   decorators: [
-    (Story: StoryFn) => (
+    (Story: ComponentType) => (
       <div className="w-full max-w-[40rem]">
         <Story />
       </div>
@@ -452,7 +453,7 @@ export const ResolutionPlanFlow: Story = {
 export const MismatchWithOneAction: Story = {
   parameters: { docs: { story: { inline: true } } },
   decorators: [
-    (Story: StoryFn) => (
+    (Story: ComponentType) => (
       <div className="w-full max-w-[40rem]">
         <Story />
       </div>

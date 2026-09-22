@@ -48,7 +48,7 @@ describe("F0Drawer", () => {
 
       expect(DrawerInternal).toHaveBeenCalledWith(
         expect.objectContaining({ isOpen: false }),
-        expect.anything()
+        undefined
       )
     })
 
@@ -78,7 +78,7 @@ describe("F0Drawer", () => {
           variant: expect.anything(),
           disableClose: expect.anything(),
         }),
-        expect.anything()
+        undefined
       )
     })
 
@@ -103,7 +103,7 @@ describe("F0Drawer", () => {
           size: "md",
           position: "right",
         }),
-        expect.anything()
+        undefined
       )
     })
 
@@ -121,7 +121,7 @@ describe("F0Drawer", () => {
 
       expect(DrawerInternal).toHaveBeenCalledWith(
         expect.objectContaining({ container }),
-        expect.anything()
+        undefined
       )
     })
   })
@@ -142,7 +142,7 @@ describe("F0Drawer", () => {
 
       expect(DrawerInternal).toHaveBeenCalledWith(
         expect.objectContaining(actions),
-        expect.anything()
+        undefined
       )
     })
 
@@ -162,7 +162,7 @@ describe("F0Drawer", () => {
 
       expect(DrawerInternal).toHaveBeenCalledWith(
         expect.objectContaining(props),
-        expect.anything()
+        undefined
       )
     })
 
@@ -180,7 +180,7 @@ describe("F0Drawer", () => {
 
       expect(DrawerInternal).toHaveBeenCalledWith(
         expect.objectContaining(props),
-        expect.anything()
+        undefined
       )
     })
   })
@@ -202,7 +202,7 @@ describe("F0Drawer", () => {
           primaryAction: expect.anything(),
           secondaryAction: expect.anything(),
         }),
-        expect.anything()
+        undefined
       )
     })
 
@@ -223,7 +223,7 @@ describe("F0Drawer", () => {
 
       expect(DrawerInternal).toHaveBeenCalledWith(
         expect.objectContaining({ onClose }),
-        expect.anything()
+        undefined
       )
     })
 

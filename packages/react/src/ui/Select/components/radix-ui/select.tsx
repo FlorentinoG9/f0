@@ -261,7 +261,7 @@ Select.displayName = SELECT_NAME
 
 const TRIGGER_NAME = "SelectTrigger"
 
-type SelectTriggerElement = React.ElementRef<typeof Primitive.button>
+type SelectTriggerElement = React.ComponentRef<typeof Primitive.button>
 type PrimitiveButtonProps = React.ComponentPropsWithoutRef<
   typeof Primitive.button
 >
@@ -392,7 +392,7 @@ SelectTrigger.displayName = TRIGGER_NAME
 
 const VALUE_NAME = "SelectValue"
 
-type SelectValueElement = React.ElementRef<typeof Primitive.span>
+type SelectValueElement = React.ComponentRef<typeof Primitive.span>
 type PrimitiveSpanProps = React.ComponentPropsWithoutRef<typeof Primitive.span>
 interface SelectValueProps extends Omit<PrimitiveSpanProps, "placeholder"> {
   placeholder?: React.ReactNode
@@ -445,7 +445,7 @@ SelectValue.displayName = VALUE_NAME
 
 const ICON_NAME = "SelectIcon"
 
-type SelectIconElement = React.ElementRef<typeof Primitive.span>
+type SelectIconElement = React.ComponentRef<typeof Primitive.span>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface SelectIconProps extends PrimitiveSpanProps {}
 
@@ -1126,7 +1126,7 @@ SelectContentImpl.displayName = CONTENT_IMPL_NAME
 
 const LISTBOX_NAME = "SelectListbox"
 
-type SelectListboxElement = React.ElementRef<typeof Primitive.div>
+type SelectListboxElement = React.ComponentRef<typeof Primitive.div>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface SelectListboxProps extends PrimitiveDivProps {}
 
@@ -1156,7 +1156,7 @@ SelectListbox.displayName = LISTBOX_NAME
 
 const ITEM_ALIGNED_POSITION_NAME = "SelectItemAlignedPosition"
 
-type SelectItemAlignedPositionElement = React.ElementRef<typeof Primitive.div>
+type SelectItemAlignedPositionElement = React.ComponentRef<typeof Primitive.div>
 interface SelectItemAlignedPositionProps
   extends PrimitiveDivProps, SelectPopperPrivateProps {}
 
@@ -1401,7 +1401,7 @@ SelectItemAlignedPosition.displayName = ITEM_ALIGNED_POSITION_NAME
 
 const POPPER_POSITION_NAME = "SelectPopperPosition"
 
-type SelectPopperPositionElement = React.ElementRef<
+type SelectPopperPositionElement = React.ComponentRef<
   typeof PopperPrimitive.Content
 >
 type PopperContentProps = React.ComponentPropsWithoutRef<
@@ -1468,7 +1468,7 @@ const [SelectViewportProvider, useSelectViewportContext] =
 
 const VIEWPORT_NAME = "SelectViewport"
 
-type SelectViewportElement = React.ElementRef<typeof Primitive.div>
+type SelectViewportElement = React.ComponentRef<typeof Primitive.div>
 type PrimitiveDivProps = React.ComponentPropsWithoutRef<typeof Primitive.div>
 interface SelectViewportProps extends PrimitiveDivProps {
   nonce?: string
@@ -1565,7 +1565,7 @@ type SelectGroupContextValue = { id: string }
 const [SelectGroupContextProvider, useSelectGroupContext] =
   createSelectContext<SelectGroupContextValue>(GROUP_NAME)
 
-type SelectGroupElement = React.ElementRef<typeof Primitive.div>
+type SelectGroupElement = React.ComponentRef<typeof Primitive.div>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface SelectGroupProps extends PrimitiveDivProps {}
 
@@ -1594,7 +1594,7 @@ SelectGroup.displayName = GROUP_NAME
 
 const LABEL_NAME = "SelectLabel"
 
-type SelectLabelElement = React.ElementRef<typeof Primitive.div>
+type SelectLabelElement = React.ComponentRef<typeof Primitive.div>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface SelectLabelProps extends PrimitiveDivProps {}
 
@@ -1627,7 +1627,7 @@ type SelectItemContextValue<T extends string = string> = {
 export const [SelectItemContextProvider, useSelectItemContext] =
   createSelectContext<SelectItemContextValue>(ITEM_NAME)
 
-type SelectItemElement = React.ElementRef<typeof Primitive.div>
+type SelectItemElement = React.ComponentRef<typeof Primitive.div>
 interface SelectItemProps extends PrimitiveDivProps {
   value: string
   disabled?: boolean
@@ -1789,7 +1789,7 @@ SelectItem.displayName = ITEM_NAME
 
 const ITEM_TEXT_NAME = "SelectItemText"
 
-type SelectItemTextElement = React.ElementRef<typeof Primitive.span>
+type SelectItemTextElement = React.ComponentRef<typeof Primitive.span>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface SelectItemTextProps extends PrimitiveSpanProps {}
 
@@ -1867,7 +1867,7 @@ SelectItemText.displayName = ITEM_TEXT_NAME
 
 const ITEM_INDICATOR_NAME = "SelectItemIndicator"
 
-type SelectItemIndicatorElement = React.ElementRef<typeof Primitive.span>
+type SelectItemIndicatorElement = React.ComponentRef<typeof Primitive.span>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface SelectItemIndicatorProps extends PrimitiveSpanProps {}
 
@@ -2007,7 +2007,7 @@ const SelectScrollDownButton = React.forwardRef<
 
 SelectScrollDownButton.displayName = SCROLL_DOWN_BUTTON_NAME
 
-type SelectScrollButtonImplElement = React.ElementRef<typeof Primitive.div>
+type SelectScrollButtonImplElement = React.ComponentRef<typeof Primitive.div>
 interface SelectScrollButtonImplProps extends PrimitiveDivProps {
   onAutoScroll(): void
 }
@@ -2087,7 +2087,7 @@ SelectScrollButtonImpl.displayName = "SelectScrollButtonImpl"
 
 const SEPARATOR_NAME = "SelectSeparator"
 
-type SelectSeparatorElement = React.ElementRef<typeof Primitive.div>
+type SelectSeparatorElement = React.ComponentRef<typeof Primitive.div>
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface SelectSeparatorProps extends PrimitiveDivProps {}
 
@@ -2107,7 +2107,7 @@ SelectSeparator.displayName = SEPARATOR_NAME
 
 const ARROW_NAME = "SelectArrow"
 
-type SelectArrowElement = React.ElementRef<typeof PopperPrimitive.Arrow>
+type SelectArrowElement = React.ComponentRef<typeof PopperPrimitive.Arrow>
 type PopperArrowProps = React.ComponentPropsWithoutRef<
   typeof PopperPrimitive.Arrow
 >

@@ -69,7 +69,7 @@ export function Item({
 
   // Make item draggable
   useDraggable({
-    ref: itemRef as React.RefObject<HTMLElement>,
+    ref: itemRef as React.RefObject<HTMLElement | null>,
     payload,
     disabled: !sortable,
   })

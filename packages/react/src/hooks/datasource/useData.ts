@@ -445,7 +445,7 @@ export function useData<
     onPaginationChange,
   } = source
 
-  const cleanup = useRef<(() => void) | undefined>()
+  const cleanup = useRef<(() => void) | undefined>(undefined)
 
   const {
     isInitialLoading,

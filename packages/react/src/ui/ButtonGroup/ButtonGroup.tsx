@@ -13,6 +13,7 @@ import {
   MobileDropdown,
 } from "@/experimental/Navigation/Dropdown"
 import { Ellipsis } from "@/icons/app"
+import { asNonNullRef } from "@/lib/refs"
 import { cn } from "@/lib/utils"
 import { type NavTarget } from "@/ui/Action"
 import { useOverflowCalculation } from "@/ui/OverflowList/useOverflowCalculation"
@@ -252,7 +253,7 @@ export function ButtonGroup({
 }: ButtonGroupProps) {
   const rootRef = useRef<HTMLDivElement>(null)
   const { width: containerWidth = 0 } = useResizeObserver({
-    ref: rootRef,
+    ref: asNonNullRef(rootRef),
     box: "border-box",
   })
   const viewportBreakpoint =

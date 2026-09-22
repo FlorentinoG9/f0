@@ -31,7 +31,7 @@ type AddRowRowProps<
 > & {
   addRowActions: PrimaryActionItemDefinition[]
   addRowLabel?: string
-  rowRef: React.RefObject<HTMLTableRowElement>
+  rowRef: React.RefObject<HTMLTableRowElement | null>
 }
 
 const AddRowRowInner = <
@@ -54,7 +54,7 @@ const AddRowRowInner = <
   >,
   ref:
     | ((element: HTMLTableRowElement | null) => void)
-    | React.RefObject<HTMLTableRowElement>
+    | React.RefObject<HTMLTableRowElement | null>
     | null
 ) => {
   const actions: AddRowAction[] = props.addRowActions.map((action) => ({
@@ -100,7 +100,7 @@ export const AddRowRow = forwardRef(AddRowRowInner) as <
   > & {
     ref?:
       | ((element: HTMLTableRowElement | null) => void)
-      | React.RefObject<HTMLTableRowElement>
+      | React.RefObject<HTMLTableRowElement | null>
       | null
   }
 ) => ReturnType<typeof AddRowRowInner>

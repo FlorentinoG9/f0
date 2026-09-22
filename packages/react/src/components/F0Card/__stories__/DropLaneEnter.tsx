@@ -17,7 +17,7 @@ export function DropLaneEnter({
   const [over, setOver] = useState(false)
 
   useDroppableList({
-    ref: laneRef as React.RefObject<HTMLElement>,
+    ref: laneRef as React.RefObject<HTMLElement | null>,
     id,
     accepts: ["list-card"],
   })

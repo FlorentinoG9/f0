@@ -3,7 +3,7 @@ import { useDndContextOptional } from "./context"
 import type { DragPayload } from "./types"
 
 export function useDraggable<T = unknown>(args: {
-  ref: React.RefObject<HTMLElement>
+  ref: React.RefObject<HTMLElement | null>
   payload: DragPayload<T>
   disabled?: boolean
   handleRef?: React.RefObject<HTMLElement | null>
@@ -33,7 +33,7 @@ export function useDraggable<T = unknown>(args: {
 }
 
 export function useDroppableList(args?: {
-  ref: React.RefObject<HTMLElement>
+  ref: React.RefObject<HTMLElement | null>
   id: string
   accepts: string[]
 }) {

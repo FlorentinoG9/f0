@@ -1,7 +1,7 @@
 import { useVirtualizer } from "@tanstack/react-virtual"
 import {
   ComponentPropsWithoutRef,
-  ElementRef,
+  ComponentRef,
   forwardRef,
   ReactNode,
   useContext,
@@ -106,7 +106,7 @@ type SelectContentProps = (
   keepTriggerAccessible?: boolean
 }
 const SelectContent = forwardRef<
-  ElementRef<typeof SelectPrimitive.Content>,
+  ComponentRef<typeof SelectPrimitive.Content>,
   SelectContentProps
 >(
   (
